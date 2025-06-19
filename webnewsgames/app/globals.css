@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Cores customizadas como variáveis */
+    --color-primary: #1e40af;
+    --color-accent: #2563eb;
+    --color-hoverBlue: #93c5fd;
+    --color-lightGray: #f3f4f6;
+    --color-darkGray: #4b5563;
+    --color-hoverDarkBlue: #1d4ed8;
+    --color-grey: #999999;
+
+    /* Fontes */
+    --font-sans: Arial, sans-serif;
+  }
+
+  /* Usar fonte personalizada no body */
+  body {
+    font-family: var(--font-sans);
+  }
+}
+
+/* Exemplo de uso das cores via classes customizadas */
+@layer components {
+  .bg-primary {
+    background-color: var(--color-primary);
+  }
+  .bg-accent {
+    background-color: var(--color-accent);
+  }
+  .text-darkGray {
+    color: var(--color-darkGray);
+  }
+  .hover\:bg-hoverDarkBlue:hover {
+    background-color: var(--color-hoverDarkBlue);
+  }
+}
+
+/* Exemplo de media queries para breakpoints */
+@media (min-width: 640px) {
+  /* sm */
+  /* aqui vc pode definir classes customizadas, se quiser */
+}
+
+@media (min-width: 768px) {
+  /* md */
+}
+
+@media (min-width: 1024px) {
+  /* lg */
+}
+
+@media (min-width: 1280px) {
+  /* xl */
+}
+
+@media (min-width: 1536px) {
+  /* 2xl */
+}
