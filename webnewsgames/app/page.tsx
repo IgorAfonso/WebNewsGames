@@ -1,12 +1,12 @@
-import FeaturedNews from "@/components/HomeCOmponents/FeaturedNews";
-import Footer from "@/components/HomeCOmponents/Footer";
-import HeaderComponent from "@/components/HomeCOmponents/HomeHeader";
-import ListOfNews from "@/components/HomeCOmponents/ListOfNews";
+import FeaturedNews from "@/components/HomeComponents/FeaturedNews";
+import Footer from "@/components/DefaultFooterComponent/Footer";
+import ListOfNews from "@/components/HomeComponents/ListOfNews";
+import GeneralHeader from "@/components/DefaultHeaderComponent/GeneralHeader";
 
 export default function Home() {
   return (
     <div>
-      <HeaderComponent />
+      <GeneralHeader PageDescriptor="Pagina Inicial" />;
       <FeaturedNews />
       <ListOfNews />
       <Footer />

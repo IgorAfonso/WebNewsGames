@@ -21,7 +21,6 @@
   }
 }
 
-/* Exemplo de uso das cores via classes customizadas */
 @layer components {
   .bg-primary {
     background-color: var(--color-primary);
