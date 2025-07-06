@@ -1,26 +1,9 @@
 import { LastNews } from "@/types/lastnews";
-import NewsImage from "../../assets/GOdOfWar.jpeg";
-import Image from "next/image";
 import ListOfNewsBox from "./ListOfNewsBox";
+import GetLastNews from "@/services/GetLastNews";
 
 export default function ListOfNews() {
-  const LastNewsObject: LastNews[] = [
-    {
-      id: 1,
-      title: "Título da Notícia 1",
-      description: "Resumo breve da notícia para atrair o leitor...",
-    },
-    {
-      id: 2,
-      title: "Título da Notícia 2",
-      description: "Resumo breve da notícia para atrair o leitor...",
-    },
-    {
-      id: 3,
-      title: "Título da Notícia 3",
-      description: "Resumo breve da notícia para atrair o leitor...",
-    },
-  ];
+  const LastNewsObject: LastNews[] = GetLastNews();
 
   return (
     <section className="md:container md:mx-auto px-4 py-8 m-10">
@@ -29,7 +12,7 @@ export default function ListOfNews() {
         {LastNewsObject.map((news) => (
           <div
             key={news.id}
-            className="bg-grey rounded-lg shadow-lg p-4 w-full"
+            className="bg-grey rounded-lg shadow-2xl border-1 p-4 w-full"
           >
             <ListOfNewsBox
               key={news.id}

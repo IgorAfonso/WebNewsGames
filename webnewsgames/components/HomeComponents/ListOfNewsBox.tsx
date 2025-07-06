@@ -11,7 +11,7 @@ export default function ListOfNewsBox(props: LastNews) {
         width={300}
         height={100}
         alt={props.title}
-        className="w-full rounded mb-4"
+        className="w-full rounded shadow-2xl mb-4"
       />
       <h3 className="text-lg font-semibold">{props.title}</h3>
       <p className="text-gray-600">{props.description}</p>

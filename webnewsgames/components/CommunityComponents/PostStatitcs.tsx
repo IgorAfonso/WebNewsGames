@@ -9,8 +9,8 @@ export default function PostStatitcs() {
   const onlineMembers = 961;
 
   return (
-    <div className="flex flex-row w-full p-4 m-5 container mx-auto justify-between items-center">
-      <div className="flex flex-row w-[50%] items-center justify-between">
+    <div className="flex flex-col md:flex-row w-full p-4 m-5 container mx-auto justify-between items-center">
+      <div className="flex flex-col lg:flex-row md:w-[50%] md:items-center md:justify-between my-4 gap-4">
         <div className="flex flex-row gap-3 items-center">
           <Image src={Members} alt="Members Logo" width={30} height={30} />
           <h3>{members}</h3>
