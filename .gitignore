@@ -1,0 +1,78 @@
+# -----------------------
+# Global ignores
+# -----------------------
+*.log
+*.env
+.env.*
+*.tmp
+*.bak
+*.swp
+*.swo
+*.pid
+*.tar
+*.img
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*~
+
+# -----------------------
+# Docker
+# -----------------------
+docker-compose.override.yaml
+**/.dockerignore
+
+# Docker volumes (se forem montados como pastas locais)
+volumes/
+db_data/
+pgdata/
+mysql-data/
+
+# -----------------------
+# Go (backend/)
+# -----------------------
+/backend/bin/
+/backend/pkg/
+/backend/vendor/
+/backend/coverage.out
+/backend/*.test
+/backend/*.exe
+/backend/*.out
+/backend/*.mod
+/backend/*.sum
+
+# VS Code Go extension files
+/backend/.vscode/
+/backend/.golangci.yml
+
+# -----------------------
+# Next.js / React (frontend/)
+# -----------------------
+/frontend/.next/
+/frontend/out/
+/frontend/.turbo/
+/frontend/node_modules/
+/frontend/build/
+/frontend/.env.local
+/frontend/.env.development.local
+/frontend/.env.test.local
+/frontend/.env.production.local
+
+# Optional cache dirs
+/frontend/.eslintcache
+/frontend/.parcel-cache
+/frontend/.cache
+/frontend/npm-debug.log*
+
+# -----------------------
+# IDEs e editores
+# -----------------------
+.vscode/
+.idea/
+.vs/
+*.sln
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
