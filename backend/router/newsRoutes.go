@@ -1,9 +1,8 @@
 package router
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
+	handler "main.go/handler/newshandlers"
 )
 
 func newsRoutes(router *gin.Engine) {
@@ -11,20 +10,10 @@ func newsRoutes(router *gin.Engine) {
 	
 	v1 := router.Group(basePath)
 	{
-		v1.GET("/news", func(ctx *gin.Context) {
-			fmt.Println("FUNCIONOU")
-		})
-		v1.GET("/listnews", func(ctx *gin.Context) {
-			fmt.Println("FUNCIONOU")
-		})
-		v1.POST("/news", func(ctx *gin.Context) {
-			fmt.Println("FUNCIONOU")
-		})
-		v1.DELETE("/news", func(ctx *gin.Context) {
-			fmt.Println("FUNCIONOU")
-		})
-		v1.PATCH("/news", func(ctx *gin.Context) {
-			fmt.Println("FUNCIONOU")
-		})
+		v1.GET("/news", handler.GetNews)
+		v1.GET("/listnews", handler.ListNews)
+		v1.POST("/news", handler.CreateNews)
+		v1.DELETE("/news", handler.DeleteNews)
+		v1.PATCH("/news", handler.UpdateNews)
 	}
 }
