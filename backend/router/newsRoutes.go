@@ -5,8 +5,7 @@ import (
 	handler "main.go/handler/newshandlers"
 )
 
-func newsRoutes(router *gin.Engine) {
-	basePath := "/api/v1"
+func newsRoutes(router *gin.Engine, basePath string) {
 	
 	v1 := router.Group(basePath)
 	{
