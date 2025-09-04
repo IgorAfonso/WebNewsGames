@@ -7,9 +7,14 @@ import (
 	"main.go/router"
 )
 
+var (
+	logger config.Logger
+)
+
 //@title WebNewsAPI
 func main(){
 
+	logger = *config.GetLogger("main")
   //Initialzie Configs
   err := config.Init()
   if(err != nil){

@@ -8,6 +8,7 @@ import (
 
 var (
 	db *gorm.DB
+	logger *Logger
 )
 
 func Init() error {
@@ -21,4 +22,10 @@ func Init() error {
 
 func GetPostgres() *gorm.DB{
 	return db
+}
+
+func GetLogger(p string) *Logger{
+	//Initialize Logger
+	logger = NewLogger(p)
+	return logger
 }
