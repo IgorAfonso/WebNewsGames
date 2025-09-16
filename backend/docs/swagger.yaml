@@ -1,5 +1,41 @@
+definitions:
+  newsHandler.CreateNewsObject:
+    properties:
+      firstContent:
+        type: string
+      secondContent:
+        type: string
+      thirdContent:
+        type: string
+      title:
+        type: string
+    type: object
 info:
   contact: {}
   title: WebNewsAPI
-paths: {}
+paths:
+  /news:
+    post:
+      consumes:
+      - application/json
+      description: Create a news for the app
+      parameters:
+      - description: Request Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/newsHandler.CreateNewsObject'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Create News
+      tags:
+      - Openings
 swagger: "2.0"
