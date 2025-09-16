@@ -1,10 +1,15 @@
 package router
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 func Initialize() {
 	basePath := "/api/v1"
 	router := gin.Default()
+
+	// Initialize Swagger
+	SwagRoute(router, basePath)
 
 	// Declare News Routes
 	newsRoutes(router, basePath)
