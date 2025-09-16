@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"main.go/config"
 	"main.go/router"
 )
@@ -15,12 +13,12 @@ var (
 func main(){
 
 	logger = *config.GetLogger("main")
-  //Initialzie Configs
-  err := config.Init()
-  if(err != nil){
-		fmt.Errorf("config initializarion error: %v", err)
+  	//Initialzie Configs
+	err := config.Init()
+	if(err != nil){
+		logger.Errorf("config initializarion error: %v", err)
 		return
 	}
 
-  router.Initialize()
+	router.Initialize()
 }

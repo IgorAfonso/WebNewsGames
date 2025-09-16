@@ -6,7 +6,7 @@ import (
 )
 
 func newsRoutes(router *gin.Engine, basePath string) {
-	
+	newsHandler.InitializeNewsHandler()
 	v1 := router.Group(basePath)
 	{
 		v1.GET("/news", newsHandler.GetNews)

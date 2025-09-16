@@ -10,6 +10,28 @@ definitions:
       title:
         type: string
     type: object
+  newsHandler.CreateNewsResponse:
+    properties:
+      createdAt:
+        type: string
+      firstContent:
+        type: string
+      secondContent:
+        type: string
+      thirdContent:
+        type: string
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  newsHandler.ErrorResponse:
+    properties:
+      errorCode:
+        type: string
+      message:
+        type: string
+    type: object
 info:
   contact: {}
   title: WebNewsAPI
@@ -31,10 +53,16 @@ paths:
       responses:
         "201":
           description: Created
+          schema:
+            $ref: '#/definitions/newsHandler.CreateNewsResponse'
         "400":
           description: Bad Request
+          schema:
+            $ref: '#/definitions/newsHandler.ErrorResponse'
         "500":
           description: Internal Server Error
+          schema:
+            $ref: '#/definitions/newsHandler.ErrorResponse'
       summary: Create News
       tags:
       - Openings
