@@ -2,17 +2,17 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	handler "main.go/handler/newshandlers"
+	newsHandler "main.go/handler/newsHandlers"
 )
 
 func newsRoutes(router *gin.Engine, basePath string) {
 	
 	v1 := router.Group(basePath)
 	{
-		v1.GET("/news", handler.GetNews)
-		v1.GET("/listnews", handler.ListNews)
-		v1.POST("/news", handler.CreateNews)
-		v1.DELETE("/news", handler.DeleteNews)
-		v1.PATCH("/news", handler.UpdateNews)
+		v1.GET("/news", newsHandler.GetNews)
+		v1.GET("/listnews", newsHandler.ListNews)
+		v1.POST("/news", newsHandler.CreateNews)
+		v1.DELETE("/news", newsHandler.DeleteNews)
+		v1.PATCH("/news", newsHandler.UpdateNews)
 	}
 }
