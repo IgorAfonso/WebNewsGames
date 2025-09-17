@@ -13,7 +13,7 @@ import (
 // @Summary Delete news
 // @Schemas
 // @Description Delete a news
-// @Tags Openings
+// @Tags News
 // @Accept json
 // @Produce json
 // @Param id query string true "News identification"
@@ -29,12 +29,12 @@ func DeleteNews(ctx *gin.Context) {
 	}
 
 	news := schema.News{}
-	if err := db.First(&news, id).Error; err != nil {
+	if err := db.Where("id = ?", id).First(&news).Error; err != nil {
 		sendErr(ctx, http.StatusNotFound, fmt.Sprintf("opening with id: %s not found", id))
 		return
 	}
 
-	if err := db.Delete(&news).Error; err != nil {
+	if err := db.Where("id = ?", id).Delete(&news).Error; err != nil {
 		sendErr(ctx, http.StatusInternalServerError, 
 			fmt.Sprintf("error deleting news with id: %s", id))
 			return

@@ -12,7 +12,7 @@ import (
 
 // @Summary Create News
 // @Description Create a news for the app
-// @Tags Openings
+// @Tags News
 // @Accept json
 // @Produce json
 // @Param request body CreateNewsObject true "Request Body"

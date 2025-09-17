@@ -31,6 +31,40 @@ definitions:
       message:
         type: string
     type: object
+  newsHandler.GetNewsResponse:
+    properties:
+      data:
+        $ref: '#/definitions/schema.NewsResponse'
+      message:
+        type: string
+    type: object
+  newsHandler.ListNewsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/schema.NewsResponse'
+        type: array
+      message:
+        type: string
+    type: object
+  newsHandler.UpdateNewsObject:
+    properties:
+      firstContent:
+        type: string
+      secondContent:
+        type: string
+      thirdContent:
+        type: string
+      title:
+        type: string
+    type: object
+  newsHandler.UpdateNewsResponse:
+    properties:
+      data:
+        $ref: '#/definitions/schema.NewsResponse'
+      message:
+        type: string
+    type: object
   schema.NewsResponse:
     properties:
       createdAt:
@@ -52,6 +86,25 @@ info:
   contact: {}
   title: WebNewsAPI
 paths:
+  /listnews:
+    get:
+      consumes:
+      - application/json
+      description: List all news
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/newsHandler.ListNewsResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/newsHandler.ErrorResponse'
+      summary: List news
+      tags:
+      - News
   /news:
     delete:
       consumes:
@@ -80,7 +133,69 @@ paths:
             $ref: '#/definitions/newsHandler.ErrorResponse'
       summary: Delete news
       tags:
-      - Openings
+      - News
+    get:
+      consumes:
+      - application/json
+      description: Show a news
+      parameters:
+      - description: News identification
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/newsHandler.GetNewsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/newsHandler.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/newsHandler.ErrorResponse'
+      summary: Show news
+      tags:
+      - News
+    patch:
+      consumes:
+      - application/json
+      description: Update a news
+      parameters:
+      - description: News identification
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Opening data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/newsHandler.UpdateNewsObject'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/newsHandler.UpdateNewsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/newsHandler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/newsHandler.ErrorResponse'
+      summary: Update news
+      tags:
+      - News
     post:
       consumes:
       - application/json
@@ -109,5 +224,5 @@ paths:
             $ref: '#/definitions/newsHandler.ErrorResponse'
       summary: Create News
       tags:
-      - Openings
+      - News
 swagger: "2.0"

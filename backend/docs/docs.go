@@ -15,7 +15,78 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/listnews": {
+            "get": {
+                "description": "List all news",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "News"
+                ],
+                "summary": "List news",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/newsHandler.ListNewsResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/newsHandler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/news": {
+            "get": {
+                "description": "Show a news",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "News"
+                ],
+                "summary": "Show news",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "News identification",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/newsHandler.GetNewsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/newsHandler.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/newsHandler.ErrorResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create a news for the app",
                 "consumes": [
@@ -25,7 +96,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Openings"
+                    "News"
                 ],
                 "summary": "Create News",
                 "parameters": [
@@ -69,7 +140,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Openings"
+                    "News"
                 ],
                 "summary": "Delete news",
                 "parameters": [
@@ -96,6 +167,57 @@ const docTemplate = `{
                     },
                     "404": {
                         "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/newsHandler.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Update a news",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "News"
+                ],
+                "summary": "Update news",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "News identification",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "Opening data",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/newsHandler.UpdateNewsObject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/newsHandler.UpdateNewsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/newsHandler.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/newsHandler.ErrorResponse"
                         }
@@ -149,6 +271,59 @@ const docTemplate = `{
             "properties": {
                 "errorCode": {
                     "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "newsHandler.GetNewsResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/schema.NewsResponse"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "newsHandler.ListNewsResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.NewsResponse"
+                    }
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "newsHandler.UpdateNewsObject": {
+            "type": "object",
+            "properties": {
+                "firstContent": {
+                    "type": "string"
+                },
+                "secondContent": {
+                    "type": "string"
+                },
+                "thirdContent": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "newsHandler.UpdateNewsResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/schema.NewsResponse"
                 },
                 "message": {
                     "type": "string"

@@ -7,6 +7,17 @@ import (
 	"main.go/schema"
 )
 
+// @BasePath /api/v1
+
+// @Summary List news
+// @Schemes
+// @Description List all news
+// @Tags News
+// @Accept json
+// @Produce json
+// @Success 200 {object} ListNewsResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /listnews [get]
 func ListNews(ctx *gin.Context) {
 	news := []schema.News{}
 
