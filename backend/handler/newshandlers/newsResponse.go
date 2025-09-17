@@ -3,9 +3,9 @@ package newsHandler
 import (
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
+	"main.go/schema"
 )
 
 func sendErr(ctx *gin.Context, code int, msg string) {
@@ -38,10 +38,26 @@ type ErrorResponse struct {
 }
 
 type CreateNewsResponse struct {
-	CreatedAt     time.Time `json:"createdAt"`
-	UpdatedAt     time.Time `json:"updatedAt"`
-	Title         string    `json:"title"`
-	FirstContent  string    `json:"firstContent"`
-	SecondContent string    `json:"secondContent"`
-	ThirdContent  string    `json:"thirdContent"`
+	Message string 					`json:"message"`
+	Data schema.NewsResponse 		`json:"data"`
+}
+
+type DeleteNewsResponse struct{
+	Message string 					`json:"message"`
+	Data schema.NewsResponse 		`json:"data"`
+}
+
+type GetNewsResponse struct{
+	Message string 					`json:"message"`
+	Data schema.NewsResponse 		`json:"data"`
+}
+
+type ListNewsResponse struct{
+	Message string 					`json:"message"`
+	Data []schema.NewsResponse 		`json:"data"`
+}
+
+type UpdateNewsResponse struct{
+	Message string 					`json:"message"`
+	Data schema.NewsResponse 		`json:"data"`
 }

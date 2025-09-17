@@ -60,6 +60,50 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/opening": {
+            "delete": {
+                "description": "Delete a news",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Openings"
+                ],
+                "summary": "Delete news",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "News identification",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/newsHandler.DeleteNewsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/newsHandler.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/newsHandler.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -83,22 +127,21 @@ const docTemplate = `{
         "newsHandler.CreateNewsResponse": {
             "type": "object",
             "properties": {
-                "createdAt": {
-                    "type": "string"
+                "data": {
+                    "$ref": "#/definitions/schema.NewsResponse"
                 },
-                "firstContent": {
+                "message": {
                     "type": "string"
+                }
+            }
+        },
+        "newsHandler.DeleteNewsResponse": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/schema.NewsResponse"
                 },
-                "secondContent": {
-                    "type": "string"
-                },
-                "thirdContent": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "updatedAt": {
+                "message": {
                     "type": "string"
                 }
             }
@@ -110,6 +153,32 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.NewsResponse": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "firstContent": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "secondContent": {
+                    "type": "string"
+                },
+                "thirdContent": {
+                    "type": "string"
+                },
+                "updatedAt": {
                     "type": "string"
                 }
             }
