@@ -59,9 +59,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/opening": {
+            },
             "delete": {
                 "description": "Delete a news",
                 "consumes": [

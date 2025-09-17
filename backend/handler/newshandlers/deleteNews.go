@@ -20,7 +20,7 @@ import (
 // @Success 200 {object} DeleteNewsResponse
 // @Failure 400 {object} ErrorResponse
 // @Failure 404 {object} ErrorResponse
-// @Router /opening [delete]
+// @Router /news [delete]
 func DeleteNews(ctx *gin.Context) {
 	id := ctx.Query("id")
 	if id == ""{
