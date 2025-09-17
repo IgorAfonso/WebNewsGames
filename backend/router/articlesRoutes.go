@@ -10,7 +10,7 @@ func articlesRoutes(router *gin.Engine, basePath string) {
 	v1 := router.Group(basePath)
 	{
 		v1.GET("/article", articlesHandlers.GetArticle)
-		v1.GET("/listarticles", articlesHandlers.ListArticles)
+		v1.GET("/articles", articlesHandlers.ListArticles)
 		v1.POST("/article", articlesHandlers.CreateArticle)
 		v1.DELETE("/article", articlesHandlers.DeleteArticle)
 		v1.PATCH("/article", articlesHandlers.UpdateArticle)

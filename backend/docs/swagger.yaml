@@ -1,4 +1,62 @@
 definitions:
+  articleshandlers.CreateArticleRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  articleshandlers.CreateArticleResponse:
+    properties:
+      data:
+        $ref: '#/definitions/schema.ArticlesResponse'
+      message:
+        type: string
+    type: object
+  articleshandlers.DeleteArticleResponse:
+    properties:
+      data:
+        $ref: '#/definitions/schema.ArticlesResponse'
+      message:
+        type: string
+    type: object
+  articleshandlers.ErrorResponse:
+    properties:
+      errorCode:
+        type: string
+      message:
+        type: string
+    type: object
+  articleshandlers.GetArticleResponse:
+    properties:
+      data:
+        $ref: '#/definitions/schema.ArticlesResponse'
+      message:
+        type: string
+    type: object
+  articleshandlers.ListArticleResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/schema.ArticlesResponse'
+        type: array
+      message:
+        type: string
+    type: object
+  articleshandlers.UpdateArticleRequest:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  articleshandlers.UpdateArticleResponse:
+    properties:
+      data:
+        $ref: '#/definitions/schema.ArticlesResponse'
+      message:
+        type: string
+    type: object
   newsHandler.CreateNewsObject:
     properties:
       firstContent:
@@ -65,6 +123,21 @@ definitions:
       message:
         type: string
     type: object
+  schema.ArticlesResponse:
+    properties:
+      content:
+        type: string
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
   schema.NewsResponse:
     properties:
       createdAt:
@@ -86,6 +159,145 @@ info:
   contact: {}
   title: WebNewsAPI
 paths:
+  /article:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a Article
+      parameters:
+      - description: Article identification
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/articleshandlers.DeleteArticleResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/articleshandlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/articleshandlers.ErrorResponse'
+      summary: Delete Article
+      tags:
+      - Article
+    get:
+      consumes:
+      - application/json
+      description: Show a Article
+      parameters:
+      - description: Article identification
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/articleshandlers.GetArticleResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/articleshandlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/articleshandlers.ErrorResponse'
+      summary: Show Article
+      tags:
+      - Article
+    patch:
+      consumes:
+      - application/json
+      description: Update a Article
+      parameters:
+      - description: Article identification
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: article data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/articleshandlers.UpdateArticleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/articleshandlers.UpdateArticleResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/articleshandlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/articleshandlers.ErrorResponse'
+      summary: Update Article
+      tags:
+      - Article
+    post:
+      consumes:
+      - application/json
+      description: Create a Article for the app
+      parameters:
+      - description: Request Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/articleshandlers.CreateArticleRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/articleshandlers.CreateArticleResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/articleshandlers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/articleshandlers.ErrorResponse'
+      summary: Create Articles
+      tags:
+      - Article
+  /articles:
+    get:
+      consumes:
+      - application/json
+      description: List all articles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/articleshandlers.ListArticleResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/articleshandlers.ErrorResponse'
+      summary: List Articles
+      tags:
+      - Article
   /listnews:
     get:
       consumes:
@@ -172,7 +384,7 @@ paths:
         name: id
         required: true
         type: string
-      - description: Opening data
+      - description: News data
         in: body
         name: request
         required: true

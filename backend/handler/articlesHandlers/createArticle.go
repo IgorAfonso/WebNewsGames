@@ -12,11 +12,11 @@ import (
 
 // @Summary Create Articles
 // @Description Create a Article for the app
-// @Tags News
+// @Tags Article
 // @Accept json
 // @Produce json
-// @Param request body CreateArticleObject true "Request Body"
-// @Success 201 {object} CreateArticleRequest
+// @Param request body CreateArticleRequest true "Request Body"
+// @Success 201 {object} CreateArticleResponse
 // @Failure 400 {object} ErrorResponse
 // @Failure 500 {object} ErrorResponse
 // @Router /article [post]
