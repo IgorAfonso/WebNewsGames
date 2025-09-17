@@ -16,7 +16,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param id query string true "News identification"
-// @Param request body UpdateNewsObject true "Opening data"
+// @Param request body UpdateNewsObject true "News data"
 // @Success 200 {object} UpdateNewsResponse
 // @Failure 400 {object} ErrorResponse
 // @Failure 500 {object} ErrorResponse

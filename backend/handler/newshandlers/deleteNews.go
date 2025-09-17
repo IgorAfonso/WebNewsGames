@@ -30,7 +30,7 @@ func DeleteNews(ctx *gin.Context) {
 
 	news := schema.News{}
 	if err := db.Where("id = ?", id).First(&news).Error; err != nil {
-		sendErr(ctx, http.StatusNotFound, fmt.Sprintf("opening with id: %s not found", id))
+		sendErr(ctx, http.StatusNotFound, fmt.Sprintf("news with id: %s not found", id))
 		return
 	}
 
