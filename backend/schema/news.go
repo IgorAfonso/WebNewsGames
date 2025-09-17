@@ -17,11 +17,11 @@ type News struct {
 }
 
 type NewsResponse struct {
-	ID uint 			`json:"id"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
-	DeletedAt time.Time `json:"deletedAt,omitempty"`
-	FirstContent string
-	SecondContent string
-	ThirdContent string
+	ID uint 				`json:"id"`
+	CreatedAt time.Time 	`json:"createdAt"`
+	UpdatedAt time.Time 	`json:"updatedAt"`
+	DeletedAt time.Time 	`json:"deletedAt,omitempty"`
+	FirstContent string 	`json:"firstContent"`
+	SecondContent string 	`json:"secondContent"`
+	ThirdContent string 	`json:"thirdContent"`
 }
