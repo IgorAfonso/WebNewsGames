@@ -6,7 +6,7 @@ import GeneralHeader from "@/components/DefaultHeaderComponent/GeneralHeader";
 
 export default function CommunityPage() {
   return (
-    <div>
+    <>
       <GeneralHeader PageDescriptor="Comunidade" />
       <div className="bg-accent">
         <FindDiscutionsComponent />
@@ -14,6 +14,6 @@ export default function CommunityPage() {
       <PostStatitcs />
       <NewPosts />
       <Footer />
-    </div>
+    </>
   );
 }
