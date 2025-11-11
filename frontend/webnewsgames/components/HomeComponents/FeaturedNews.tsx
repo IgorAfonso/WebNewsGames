@@ -4,7 +4,7 @@ import BreakingImage from "../../assets/GOdOfWar.jpeg";
 
 export default function FeaturedNews() {
   return (
-    <section className="m-10 md:container md:mx-auto px-4 py-8">
+    <section className="m-10 md:container md:mx-auto px-4">
       <h2 className="text-2xl font-bold mb-4">Destaques</h2>
       <div className="bg-grey rounded-lg shadow-2xl border-1 p-6 flex flex-col md:flex-row content-center">
         <div className="md:w-60">
