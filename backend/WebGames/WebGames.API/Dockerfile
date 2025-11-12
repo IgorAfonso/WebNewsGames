@@ -12,19 +12,19 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["WebGamesAPI/WebGamesAPI.csproj", "WebGamesAPI/"]
-RUN dotnet restore "./WebGamesAPI/WebGamesAPI.csproj"
+COPY ["WebGames.API/WebGames.API.csproj", "WebGames.API/"]
+RUN dotnet restore "./WebGames.API/WebGames.API.csproj"
 COPY . .
-WORKDIR "/src/WebGamesAPI"
-RUN dotnet build "./WebGamesAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/WebGames.API"
+RUN dotnet build "./WebGames.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Esta fase é usada para publicar o projeto de serviço a ser copiado para a fase final
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./WebGamesAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./WebGames.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # Esta fase é usada na produção ou quando executada no VS no modo normal (padrão quando não está usando a configuração de Depuração)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WebGamesAPI.dll"]
+ENTRYPOINT ["dotnet", "WebGames.API.dll"]

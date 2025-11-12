@@ -1,4 +1,4 @@
-namespace WebGamesAPI
+namespace WebGames.API
 {
     public class WeatherForecast
     {
