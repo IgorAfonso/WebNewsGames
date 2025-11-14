@@ -18,8 +18,4 @@
     <ProjectReference Include="..\WebGames.Application\WebGames.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
