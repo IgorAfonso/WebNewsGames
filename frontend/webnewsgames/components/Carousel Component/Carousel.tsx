@@ -66,12 +66,11 @@ export default function CarrosselCampeonatos() {
 
   return (
     <section>
-      <div className="min-h-screen py-12 px-4">
-        <div className="mx-auto">
-          <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">
+      <div className="container w-[90%] mx-auto py-12">
+        <div>
+          <h1 className="text-4xl font-bold text-center text-gray-800">
             Campeonatos em Destaque
           </h1>
-
           <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden">
             {/* Slides */}
             <div
@@ -81,7 +80,7 @@ export default function CarrosselCampeonatos() {
               {campeonatos.map((campeonato) => (
                 <div
                   key={campeonato.id}
-                  className="w-full flex-shrink-0 flex flex-col md:flex-row items-center justify-between p-8 md:p-12"
+                  className="w-full bg-grey shadow-2xl border-1 flex-shrink-0 flex flex-col md:flex-row items-center justify-between p-8 md:p-12"
                 >
                   {/* Imagem */}
                   <div className="w-full md:w-1/2 mb-6 md:mb-0 md:mr-8">
