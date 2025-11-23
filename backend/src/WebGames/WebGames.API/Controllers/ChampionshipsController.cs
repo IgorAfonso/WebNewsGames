@@ -2,7 +2,7 @@
 using WebGames.Application.AppService.Interface;
 using WebGames.Application.Request.Championship;
 
-namespace WebGames.API.Controllers.Championship;
+namespace WebGames.API.Controllers;
 
 [Route("/api/v1/championship")]
 [ApiController]

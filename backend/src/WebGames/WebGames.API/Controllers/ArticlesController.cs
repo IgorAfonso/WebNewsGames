@@ -2,7 +2,7 @@
 using WebGames.Application.AppService.Interface;
 using WebGames.Application.Request.Articles;
 
-namespace WebGames.API.Controllers.Articles;
+namespace WebGames.API.Controllers;
 
 [ApiController]
 [Route("api/v1/article")]

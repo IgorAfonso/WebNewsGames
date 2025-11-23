@@ -8,7 +8,14 @@
   <Folder Name="/3 - Domain/">
     <Project Path="WebGames.Domain/WebGames.Domain.csproj" />
   </Folder>
-  <Folder Name="/4 - Infra/">
-    <Project Path="WebGames.Infra/WebGames.Infrastructure.csproj" />
+  <Folder Name="/4 - Infra/" />
+  <Folder Name="/4 - Infra/4.1 - Data/">
+    <Project Path="WebGames.Infra/WebGames.Infra.Data.csproj" />
+  </Folder>
+  <Folder Name="/4 - Infra/4.2 - CrossCutting/">
+    <Project Path="WebGames.Infra.CrossCutting/WebGames.Infra.CrossCutting.csproj" Id="600f45cc-d515-4880-9ca1-ee95a4713327" />
+  </Folder>
+  <Folder Name="/5 - Test/">
+    <Project Path="WebGames.Test/WebGames.Test.csproj" Id="5ae5f4af-42f9-45a8-a981-f372d005b41b" />
   </Folder>
 </Solution>

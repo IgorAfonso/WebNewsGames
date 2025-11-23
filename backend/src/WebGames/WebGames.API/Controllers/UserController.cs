@@ -2,7 +2,7 @@
 using WebGames.Application.AppService.Interface;
 using WebGames.Application.Request.User;
 
-namespace WebGames.API.Controllers.User;
+namespace WebGames.API.Controllers;
 
 [Route("/api/v1/user")]
 [ApiController]

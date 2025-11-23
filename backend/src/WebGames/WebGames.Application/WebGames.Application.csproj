@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebGames.Domain\WebGames.Domain.csproj" />
+    <ProjectReference Include="..\WebGames.Infra.CrossCutting\WebGames.Infra.CrossCutting.csproj" />
   </ItemGroup>
 
   <ItemGroup>

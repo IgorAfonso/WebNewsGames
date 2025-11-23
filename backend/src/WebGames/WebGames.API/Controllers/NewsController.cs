@@ -2,7 +2,7 @@
 using WebGames.Application.AppService.Interface;
 using WebGames.Application.Request.News;
 
-namespace WebGames.API.Controllers.News;
+namespace WebGames.API.Controllers;
 
 [Route("/api/v1/news")]
 [ApiController]

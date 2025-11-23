@@ -10,4 +10,10 @@
     <ProjectReference Include="..\WebGames.Domain\WebGames.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Context\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Repository\" />
+  </ItemGroup>
+
 </Project>
