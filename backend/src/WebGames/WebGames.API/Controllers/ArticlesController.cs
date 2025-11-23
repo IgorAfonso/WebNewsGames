@@ -6,18 +6,42 @@ namespace WebGames.API.Controllers;
 
 [ApiController]
 [Route("api/v1/article")]
-public class ArticlesController(IArticlesAppService ariticlesAppserice) : Controller
+public class ArticlesController(IArticlesAppService ariticlesAppserice) : BaseController
 {
-    private IArticlesAppService _ariticlesAppserice = ariticlesAppserice;
+    private IArticlesAppService _ariticlesAppservice = ariticlesAppserice;
 
     [HttpGet]
-    public async Task<IActionResult> GetByName([FromBody] ArticleByNameRequest request)
+    public async Task<IActionResult> GetByName([FromQuery] string request)
     {
-        if(request != null)
-        {
-            return Ok();
-        }
+        var appService = await _ariticlesAppservice.GetByName(request);
+        return CustomResponse(appService.Item1, appService.Item2);
+    }
 
-        return BadRequest();
+    [HttpGet("id")]
+    public async Task<IActionResult> GetById([FromQuery] Guid Id)
+    {
+        var appService = await _ariticlesAppservice.GetById(Id);
+        return CustomResponse(appService.Item1, appService.Item2);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> PostNews([FromBody] PostArticleRequest request)
+    {
+        var appService = await _ariticlesAppservice.PostArticle(request);
+        return PostResponse(appService.Item1, appService.Item2);
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteNews([FromQuery] Guid Id)
+    {
+        var appService = await _ariticlesAppservice.DeleteArticle(Id);
+        return CustomResponse(appService.Item1, appService.Item2);
+    }
+
+    [HttpPatch]
+    public async Task<IActionResult> PatchNews([FromBody] PatchArticleRequest request)
+    {
+        var appService = await _ariticlesAppservice.PatchArticle(request);
+        return CustomResponse(appService.Item1, appService.Item2);
     }
 }

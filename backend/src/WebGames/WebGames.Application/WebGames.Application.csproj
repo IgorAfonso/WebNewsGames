@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Response\Articles\" />
     <Folder Include="Response\Championship\" />
     <Folder Include="Response\User\" />
   </ItemGroup>

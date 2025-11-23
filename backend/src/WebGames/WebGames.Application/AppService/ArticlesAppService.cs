@@ -2,6 +2,6 @@
 
 namespace WebGames.Application.AppService;
 
-internal class ArticlesAppService : IArticlesAppService
+internal class ArticlesAppService /*: IArticlesAppService*/
 {
 }
