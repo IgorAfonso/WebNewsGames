@@ -2,6 +2,7 @@
 
 namespace WebGames.Application.AppService;
 
-internal class NewsAppService : INewsAppService
+public class NewsAppService /*: INewsAppService*/
 {
+
 }

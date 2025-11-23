@@ -14,7 +14,6 @@
   <ItemGroup>
     <Folder Include="Response\Articles\" />
     <Folder Include="Response\Championship\" />
-    <Folder Include="Response\News\" />
     <Folder Include="Response\User\" />
   </ItemGroup>
 
