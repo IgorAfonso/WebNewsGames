@@ -2,6 +2,6 @@
 
 namespace WebGames.Application.AppService;
 
-internal class ChampionshipAppService : IChampionshipAppService
+internal class ChampionshipAppService /*: IChampionshipAppService*/
 {
 }

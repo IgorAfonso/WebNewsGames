@@ -7,13 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebGames.Domain\WebGames.Domain.csproj" />
-    <ProjectReference Include="..\WebGames.Infra.CrossCutting\WebGames.Infra.CrossCutting.csproj" />
+    <Compile Remove="Response\User\**" />
+    <EmbeddedResource Remove="Response\User\**" />
+    <None Remove="Response\User\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Response\Championship\" />
-    <Folder Include="Response\User\" />
+    <ProjectReference Include="..\WebGames.Domain\WebGames.Domain.csproj" />
+    <ProjectReference Include="..\WebGames.Infra.CrossCutting\WebGames.Infra.CrossCutting.csproj" />
   </ItemGroup>
 
 </Project>
