@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WebGames.Domain.Interface.Repository
 {
-    internal class IChampionshipRepository
+    internal interface IChampionshipRepository
     {
     }
 }
