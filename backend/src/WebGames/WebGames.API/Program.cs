@@ -1,3 +1,5 @@
+using WebGames.Infra.CrossCutting.IoC;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -9,6 +11,9 @@ builder.Services.AddOpenApi();
 // Add swagger in the project
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//Dependency Injection
+DependencyInjectionConfig.DependencyInjectionConfiguration(builder.Services);
 
 var app = builder.Build();
 

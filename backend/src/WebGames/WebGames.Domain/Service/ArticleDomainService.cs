@@ -3,7 +3,7 @@ using WebGames.Domain.Interface.Service;
 
 namespace WebGames.Domain.Service;
 
-internal class ArticleService : IArticleDomainService
+public class ArticleDomainService : IArticleDomainService
 {
     public async Task<(bool, string)> CreateArticleAsync(Article request)
     {

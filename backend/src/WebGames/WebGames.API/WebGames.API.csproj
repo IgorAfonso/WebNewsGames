@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebGames.Application\WebGames.Application.csproj" />
+    <ProjectReference Include="..\WebGames.Infra.CrossCutting.IoC\WebGames.Infra.CrossCutting.IoC.csproj" />
   </ItemGroup>
 
 </Project>

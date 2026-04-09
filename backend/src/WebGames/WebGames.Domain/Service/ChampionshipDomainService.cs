@@ -3,7 +3,7 @@ using WebGames.Domain.Interface.Service;
 
 namespace WebGames.Domain.Service;
 
-internal class ChampionshipService : IChampionshipDomainService
+public class ChampionshipDomainService : IChampionshipDomainService
 {
     public async Task<(bool, string)> CreateChampionshipAsync(Championship request)
     {

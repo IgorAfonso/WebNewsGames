@@ -3,7 +3,7 @@ using WebGames.Domain.Interface.Service;
 
 namespace WebGames.Domain.Service;
 
-internal class NewsService : INewsDomainService
+public class NewsDomainService : INewsDomainService
 {
     public async Task<(bool, string)> CreateNewsAsync(News request)
     {
