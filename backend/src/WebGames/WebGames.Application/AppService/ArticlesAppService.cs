@@ -1,5 +1,8 @@
 using WebGames.Application.AppService.Interface;
+using WebGames.Application.Mappers;
+using WebGames.Application.Request;
 using WebGames.Application.Request.Articles;
+using WebGames.Application.Response;
 using WebGames.Application.Response.Articles;
 using WebGames.Domain.Entities;
 using WebGames.Domain.Interface.Repository;
@@ -11,21 +14,45 @@ public class ArticlesAppService(
     IArticleRepository articleRepository,
     IArticleDomainService articleDomainService) : IArticlesAppService
 {
+    public async Task<(bool, PagedResponse<GetByIdResponse>)> GetAll(PaginationRequest request)
+    {
+        var pagination = PaginationAppService.Validate(request);
+
+        if (!pagination.Success)
+            return (false, new PagedResponse<GetByIdResponse> { ErrorMessage = pagination.ErrorMessage });
+
+        var articles = await articleRepository.GetAllAsync();
+        var totalItems = articles.Count;
+        var items = articles
+            .Skip((pagination.Page - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
+            .Select(ArticleMapper.ToGetByIdResponse)
+            .ToList();
+
+        return (true, new PagedResponse<GetByIdResponse>
+        {
+            Items = items,
+            Page = pagination.Page,
+            PageSize = pagination.PageSize,
+            TotalItems = totalItems,
+            TotalPages = (int)Math.Ceiling(totalItems / (double)pagination.PageSize)
+        });
+    }
+
     public async Task<(bool, DeleteArticleResponse)> DeleteArticle(Guid Id)
     {
         var existingArticle = await articleRepository.GetByIdAsync(Id);
 
         if (existingArticle is null)
-            return (false, new DeleteArticleResponse());
+            return (false, new DeleteArticleResponse { ErrorMessage = "Article not found." });
 
         var validation = await articleDomainService.DeleteArticleAsync(existingArticle);
 
         if (!validation.Item1)
-            return (false, new DeleteArticleResponse());
+            return (false, new DeleteArticleResponse { ErrorMessage = validation.Item2 });
 
         await articleRepository.DeleteAsync(Id);
-
-        return (true, MapToDeleteResponse(existingArticle));
+        return (true, ArticleMapper.ToDeleteResponse(existingArticle));
     }
 
     public async Task<(bool, GetByIdResponse)> GetById(Guid Id)
@@ -33,29 +60,14 @@ public class ArticlesAppService(
         var validation = await articleDomainService.GetArticleAsync(new Article { Id = Id });
 
         if (!validation.Item1)
-            return (false, new GetByIdResponse());
+            return (false, new GetByIdResponse { ErrorMessage = validation.Item2 });
 
         var article = await articleRepository.GetByIdAsync(Id);
 
         if (article is null)
-            return (false, new GetByIdResponse());
+            return (false, new GetByIdResponse { ErrorMessage = "Article not found." });
 
-        return (true, MapToGetByIdResponse(article));
-    }
-
-    public async Task<(bool, GetByNameResponse)> GetByName(string request)
-    {
-        if (string.IsNullOrWhiteSpace(request))
-            return (false, new GetByNameResponse());
-
-        var articles = await articleRepository.GetAllAsync();
-        var article = articles.FirstOrDefault(item =>
-            string.Equals(item.Title, request, StringComparison.OrdinalIgnoreCase));
-
-        if (article is null)
-            return (false, new GetByNameResponse());
-
-        return (true, MapToGetByNameResponse(article));
+        return (true, ArticleMapper.ToGetByIdResponse(article));
     }
 
     public async Task<(bool, PatchArticleResponse)> PatchArticle(PatchArticleRequest request)
@@ -63,7 +75,7 @@ public class ArticlesAppService(
         var existingArticle = await articleRepository.GetByIdAsync(request.Id);
 
         if (existingArticle is null)
-            return (false, new PatchArticleResponse());
+            return (false, new PatchArticleResponse { ErrorMessage = "Article not found." });
 
         existingArticle.Title = request.Title ?? existingArticle.Title;
         existingArticle.Content = request.Content ?? existingArticle.Content;
@@ -79,11 +91,11 @@ public class ArticlesAppService(
         var validation = await articleDomainService.UpdateArticleAsync(existingArticle);
 
         if (!validation.Item1)
-            return (false, new PatchArticleResponse());
+            return (false, new PatchArticleResponse { ErrorMessage = validation.Item2 });
 
         await articleRepository.UpdateAsync(existingArticle);
 
-        return (true, MapToPatchResponse(existingArticle));
+        return (true, ArticleMapper.ToPatchResponse(existingArticle));
     }
 
     public async Task<(bool, PostArticleResponse)> PostArticle(PostArticleRequest request)
@@ -106,100 +118,9 @@ public class ArticlesAppService(
         var validation = await articleDomainService.CreateArticleAsync(article);
 
         if (!validation.Item1)
-            return (false, new PostArticleResponse());
+            return (false, new PostArticleResponse { ErrorMessage = validation.Item2 });
 
         await articleRepository.AddAsync(article);
-
-        return (true, MapToPostResponse(article));
-    }
-
-    private static GetByIdResponse MapToGetByIdResponse(Article article)
-    {
-        return new GetByIdResponse
-        {
-            Id = article.Id,
-            Title = article.Title,
-            Content = article.Content,
-            ImageBase64 = article.ImageBase64,
-            ImageCaption = article.ImageCaption,
-            Content2 = article.Content2,
-            Image2Base64 = article.Image2Base64,
-            Image2Caption = article.Image2Caption,
-            Content3 = article.Content3,
-            Image3Base64 = article.Image3Base64,
-            Image3Caption = article.Image3Caption
-        };
-    }
-
-    private static GetByNameResponse MapToGetByNameResponse(Article article)
-    {
-        return new GetByNameResponse
-        {
-            Id = article.Id,
-            Title = article.Title,
-            Content = article.Content,
-            ImageBase64 = article.ImageBase64,
-            ImageCaption = article.ImageCaption,
-            Content2 = article.Content2,
-            Image2Base64 = article.Image2Base64,
-            Image2Caption = article.Image2Caption,
-            Content3 = article.Content3,
-            Image3Base64 = article.Image3Base64,
-            Image3Caption = article.Image3Caption
-        };
-    }
-
-    private static PostArticleResponse MapToPostResponse(Article article)
-    {
-        return new PostArticleResponse
-        {
-            Id = article.Id,
-            Title = article.Title,
-            Content = article.Content,
-            ImageBase64 = article.ImageBase64,
-            ImageCaption = article.ImageCaption,
-            Content2 = article.Content2,
-            Image2Base64 = article.Image2Base64,
-            Image2Caption = article.Image2Caption,
-            Content3 = article.Content3,
-            Image3Base64 = article.Image3Base64,
-            Image3Caption = article.Image3Caption
-        };
-    }
-
-    private static PatchArticleResponse MapToPatchResponse(Article article)
-    {
-        return new PatchArticleResponse
-        {
-            Id = article.Id,
-            Title = article.Title,
-            Content = article.Content,
-            ImageBase64 = article.ImageBase64,
-            ImageCaption = article.ImageCaption,
-            Content2 = article.Content2,
-            Image2Base64 = article.Image2Base64,
-            Image2Caption = article.Image2Caption,
-            Content3 = article.Content3,
-            Image3Base64 = article.Image3Base64,
-            Image3Caption = article.Image3Caption
-        };
-    }
-
-    private static DeleteArticleResponse MapToDeleteResponse(Article article)
-    {
-        return new DeleteArticleResponse
-        {
-            Id = article.Id,
-            Title = article.Title,
-            Content = article.Content,
-            ImageBase64 = article.ImageBase64,
-            ImageCaption = article.ImageCaption,
-            Content2 = article.Content2,
-            Image2Base64 = article.Image2Base64,
-            Image2Caption = article.Image2Caption,
-            Content3 = article.Content3,
-            Image3Base64 = article.Image3Base64,
-            Image3Caption = article.Image3Caption
-        };
+        return (true, ArticleMapper.ToPostResponse(article));
     }
 }

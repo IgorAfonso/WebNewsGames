@@ -135,6 +135,8 @@ Mappings:
 Migration existente:
 
 - `20260501000000_InitialCreate`
+- `20260501010000_AddMediaFieldsToArticlesAndNews`
+- `20260501020000_UpdateChampionshipStructure`
 
 ### Entidades
 
@@ -154,16 +156,26 @@ Todas as entidades herdam de `BaseEntity`.
 | --- | --- | --- |
 | `Id` | `Guid` | Identificador herdado de `BaseEntity` e retornado nas respostas de artigo. |
 | `Title` | `string?` | Título do artigo. |
-| `Content` | `string?` | Conteúdo principal. |
+| `Content` | `string?` | Primeiro conteúdo do artigo. Obrigatório. |
+| `ImageBase64` | `string?` | Primeira imagem em base64. Obrigatória. |
+| `ImageCaption` | `string?` | Legenda da primeira imagem. Obrigatória. |
+| `Content2` | `string?` | Segundo conteúdo do artigo. Opcional. |
+| `Image2Base64` | `string?` | Segunda imagem em base64. Opcional. |
+| `Image2Caption` | `string?` | Legenda da segunda imagem. Obrigatória quando houver segundo bloco. |
+| `Content3` | `string?` | Terceiro conteúdo do artigo. Opcional. |
+| `Image3Base64` | `string?` | Terceira imagem em base64. Opcional. |
+| `Image3Caption` | `string?` | Legenda da terceira imagem. Obrigatória quando houver terceiro bloco. |
 | `PublishedDate` | `DateTime` | Data de publicação. |
 | `AuthorId` | `Guid?` | Identificador do autor. |
-| `SecondContent` | `string?` | Conteúdo secundário. |
 
 Tabela `artigos`:
 
 - `titulo` é obrigatório e tem tamanho máximo de 200 caracteres.
-- `conteudo` é obrigatório.
-- `conteudo_secundario` é opcional.
+- `conteudo` é obrigatório e tem tamanho máximo de 5000 caracteres.
+- `imagem_base64` é obrigatória.
+- `legenda_imagem` é obrigatória e tem tamanho máximo de 700 caracteres.
+- `conteudo_2`, `imagem_2_base64` e `legenda_imagem_2` são opcionais, mas devem ser usados em conjunto.
+- `conteudo_3`, `imagem_3_base64` e `legenda_imagem_3` são opcionais, mas devem ser usados em conjunto.
 - `autor_id` é opcional.
 
 #### Championship
@@ -178,20 +190,36 @@ Tabela `artigos`:
 Tabela `campeonatos`:
 
 - `nome` é obrigatório e tem tamanho máximo de 200 caracteres.
-- `descricao` é obrigatória e tem tamanho máximo de 1000 caracteres.
+- `descricao` é obrigatória e tem tamanho máximo de 500 caracteres.
+- `sistema` é obrigatório.
+- `local` é obrigatório.
+- `data_inicio` e `data_fim` são obrigatórias.
+- `apenas_exibicional` é obrigatório e usado como `true`.
 
 #### News
 
 | Campo | Tipo | Descrição |
 | --- | --- | --- |
 | `Title` | `string?` | Título da notícia. |
-| `Content` | `string?` | Conteúdo da notícia. |
+| `Content` | `string?` | Primeiro conteúdo da notícia. Obrigatório. |
+| `ImageBase64` | `string?` | Primeira imagem em base64. Obrigatória. |
+| `ImageCaption` | `string?` | Legenda da primeira imagem. Obrigatória. |
+| `Content2` | `string?` | Segundo conteúdo da notícia. Opcional. |
+| `Image2Base64` | `string?` | Segunda imagem em base64. Opcional. |
+| `Image2Caption` | `string?` | Legenda da segunda imagem. Obrigatória quando houver segundo bloco. |
+| `Content3` | `string?` | Terceiro conteúdo da notícia. Opcional. |
+| `Image3Base64` | `string?` | Terceira imagem em base64. Opcional. |
+| `Image3Caption` | `string?` | Legenda da terceira imagem. Obrigatória quando houver terceiro bloco. |
 | `PublishedAt` | `DateTime` | Data de publicação. |
 
 Tabela `noticias`:
 
 - `titulo` é obrigatório e tem tamanho máximo de 200 caracteres.
-- `conteudo` é obrigatório.
+- `conteudo` é obrigatório e tem tamanho máximo de 5000 caracteres.
+- `imagem_base64` é obrigatória.
+- `legenda_imagem` é obrigatória e tem tamanho máximo de 700 caracteres.
+- `conteudo_2`, `imagem_2_base64` e `legenda_imagem_2` são opcionais, mas devem ser usados em conjunto.
+- `conteudo_3`, `imagem_3_base64` e `legenda_imagem_3` são opcionais, mas devem ser usados em conjunto.
 
 ### Repositories
 
@@ -213,18 +241,25 @@ Os serviços de domínio validam regras antes da persistência ou retorno.
 
 #### ArticleDomainService
 
-- Criação e atualização exigem `Title` e `Content`.
+- Criação e atualização exigem `Title`, `Content`, `ImageBase64` e `ImageCaption`.
+- `Title` deve ter no máximo 200 caracteres.
+- `ImageBase64`, `Image2Base64` e `Image3Base64`, quando enviados, devem ser valores base64 válidos.
+- Blocos opcionais 2 e 3 devem vir completos: conteúdo, imagem e legenda.
 - Exclusão e busca exigem `Id` diferente de `Guid.Empty`.
 - Listagem retorna sucesso.
 
 #### ChampionshipDomainService
 
 - Criação e atualização exigem `Name` e `Description`.
+- `Name` deve ter no máximo 200 caracteres.
 - Exclusão e busca por `Id` exigem `Guid` válido.
 
 #### NewsDomainService
 
-- Criação exige `Title` e `Content`.
+- Criação e atualização exigem `Title`, `Content`, `ImageBase64` e `ImageCaption`.
+- `Title` deve ter no máximo 200 caracteres.
+- `ImageBase64`, `Image2Base64` e `Image3Base64`, quando enviados, devem ser valores base64 válidos.
+- Blocos opcionais 2 e 3 devem vir completos: conteúdo, imagem e legenda.
 - Busca, atualização e exclusão exigem `Id` válido.
 
 ### Endpoints
@@ -241,7 +276,7 @@ Base route:
 
 | Método | Rota | Parâmetros | Body | Descrição |
 | --- | --- | --- | --- | --- |
-| `GET` | `/api/v1/article` | Query `request: string` | Não | Busca artigo por nome/título. |
+| `GET` | `/api/v1/article` | Query `page: int`, `pageSize: int` | Não | Lista artigos paginados. |
 | `GET` | `/api/v1/article/id` | Query `Id: Guid` | Não | Busca artigo por identificador. |
 | `POST` | `/api/v1/article` | Não | `PostArticleRequest` | Cria artigo. |
 | `PATCH` | `/api/v1/article` | Não | `PatchArticleRequest` | Atualiza artigo. |
@@ -252,7 +287,15 @@ Body de criação:
 ```json
 {
   "title": "string",
-  "content": "string"
+  "content": "string",
+  "imageBase64": "aW1hZ2U=",
+  "imageCaption": "string",
+  "content2": null,
+  "image2Base64": null,
+  "image2Caption": null,
+  "content3": null,
+  "image3Base64": null,
+  "image3Caption": null
 }
 ```
 
@@ -262,7 +305,15 @@ Body de atualização:
 {
   "id": "00000000-0000-0000-0000-000000000000",
   "title": "string",
-  "content": "string"
+  "content": "string",
+  "imageBase64": "aW1hZ2U=",
+  "imageCaption": "string",
+  "content2": null,
+  "image2Base64": null,
+  "image2Caption": null,
+  "content3": null,
+  "image3Base64": null,
+  "image3Caption": null
 }
 ```
 
@@ -276,7 +327,7 @@ Base route:
 
 | Método | Rota | Parâmetros | Body | Descrição |
 | --- | --- | --- | --- | --- |
-| `GET` | `/api/v1/championship` | Query `request: string` | Não | Busca campeonato por nome. |
+| `GET` | `/api/v1/championship` | Query `page: int`, `pageSize: int` | Não | Lista campeonatos paginados. |
 | `GET` | `/api/v1/championship/id` | Query `Id: Guid` | Não | Busca campeonato por identificador. |
 | `POST` | `/api/v1/championship` | Não | `PostChampionshipRequest` | Cria campeonato. |
 | `PATCH` | `/api/v1/championship` | Não | `PatchChampionshipRequest` | Atualiza campeonato. |
@@ -288,8 +339,10 @@ Body de criação:
 {
   "championshipName": "string",
   "championshipDescription": "string",
-  "registrationDeadLine": "2026-05-01T00:00:00Z",
-  "champDate": "2026-05-01T00:00:00Z"
+  "championshipSystem": "bracket",
+  "place": "Online",
+  "startDate": "2026-05-01T00:00:00Z",
+  "endDate": "2026-05-02T00:00:00Z"
 }
 ```
 
@@ -300,8 +353,10 @@ Body de atualização:
   "champId": "00000000-0000-0000-0000-000000000000",
   "championshipName": "string",
   "championshipDescription": "string",
-  "registrationDeadLine": "2026-05-01T00:00:00Z",
-  "champDate": "2026-05-01T00:00:00Z"
+  "championshipSystem": "group",
+  "place": "Online",
+  "startDate": "2026-05-01T00:00:00Z",
+  "endDate": "2026-05-02T00:00:00Z"
 }
 ```
 
@@ -315,7 +370,7 @@ Base route:
 
 | Método | Rota | Parâmetros | Body | Descrição |
 | --- | --- | --- | --- | --- |
-| `GET` | `/api/v1/news` | Query `request: string` | Não | Busca notícia por nome/título. |
+| `GET` | `/api/v1/news` | Query `page: int`, `pageSize: int` | Não | Lista notícias paginadas. |
 | `GET` | `/api/v1/news/id` | Query `Id: Guid` | Não | Busca notícia por identificador. |
 | `POST` | `/api/v1/news` | Não | `PostNewsRequest` | Cria notícia. |
 | `PATCH` | `/api/v1/news` | Não | `PatchNewsRequest` | Atualiza notícia. |
@@ -326,7 +381,15 @@ Body de criação:
 ```json
 {
   "title": "string",
-  "content": "string"
+  "content": "string",
+  "imageBase64": "aW1hZ2U=",
+  "imageCaption": "string",
+  "content2": null,
+  "image2Base64": null,
+  "image2Caption": null,
+  "content3": null,
+  "image3Base64": null,
+  "image3Caption": null
 }
 ```
 
@@ -336,7 +399,15 @@ Body de atualização:
 {
   "id": "00000000-0000-0000-0000-000000000000",
   "title": "string",
-  "content": "string"
+  "content": "string",
+  "imageBase64": "aW1hZ2U=",
+  "imageCaption": "string",
+  "content2": null,
+  "image2Base64": null,
+  "image2Caption": null,
+  "content3": null,
+  "image3Base64": null,
+  "image3Caption": null
 }
 ```
 
@@ -376,7 +447,7 @@ Falha:
 ```json
 {
   "success": false,
-  "message": "Failed to process the request."
+  "message": "The minimum structure must contain at least one title, one content, one image and one caption."
 }
 ```
 

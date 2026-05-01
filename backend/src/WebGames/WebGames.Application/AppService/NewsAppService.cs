@@ -1,5 +1,8 @@
 using WebGames.Application.AppService.Interface;
+using WebGames.Application.Mappers;
+using WebGames.Application.Request;
 using WebGames.Application.Request.News;
+using WebGames.Application.Response;
 using WebGames.Application.Response.News;
 using WebGames.Domain.Entities;
 using WebGames.Domain.Interface.Repository;
@@ -11,34 +14,44 @@ public class NewsAppService(
     INewsRepository newsRepository,
     INewsDomainService newsDomainService) : INewsAppService
 {
+    public async Task<(bool, PagedResponse<GetByIdResponse>)> GetAll(PaginationRequest request)
+    {
+        var pagination = PaginationAppService.Validate(request);
+
+        if (!pagination.Success)
+            return (false, new PagedResponse<GetByIdResponse> { ErrorMessage = pagination.ErrorMessage });
+
+        var newsList = await newsRepository.GetAllAsync();
+        var totalItems = newsList.Count;
+        var items = newsList
+            .Skip((pagination.Page - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
+            .Select(NewsMapper.ToGetByIdResponse)
+            .ToList();
+
+        return (true, new PagedResponse<GetByIdResponse>
+        {
+            Items = items,
+            Page = pagination.Page,
+            PageSize = pagination.PageSize,
+            TotalItems = totalItems,
+            TotalPages = (int)Math.Ceiling(totalItems / (double)pagination.PageSize)
+        });
+    }
+
     public async Task<(bool, GetByIdResponse)> GetById(Guid Id)
     {
         var validation = await newsDomainService.GetNewsByIdAsync(Id);
 
         if (!validation.Item1)
-            return (false, new GetByIdResponse());
+            return (false, new GetByIdResponse { ErrorMessage = validation.Item2 });
 
         var news = await newsRepository.GetByIdAsync(Id);
 
         if (news is null)
-            return (false, new GetByIdResponse());
+            return (false, new GetByIdResponse { ErrorMessage = "News not found." });
 
-        return (true, MapToGetByIdResponse(news));
-    }
-
-    public async Task<(bool, GetByNameResponse)> GetByName(string request)
-    {
-        if (string.IsNullOrWhiteSpace(request))
-            return (false, new GetByNameResponse());
-
-        var newsList = await newsRepository.GetAllAsync();
-        var news = newsList.FirstOrDefault(item =>
-            string.Equals(item.Title, request, StringComparison.OrdinalIgnoreCase));
-
-        if (news is null)
-            return (false, new GetByNameResponse());
-
-        return (true, MapToGetByNameResponse(news));
+        return (true, NewsMapper.ToGetByIdResponse(news));
     }
 
     public async Task<(bool, PostNewsResponse)> PostNews(PostNewsRequest request)
@@ -61,11 +74,10 @@ public class NewsAppService(
         var validation = await newsDomainService.CreateNewsAsync(news);
 
         if (!validation.Item1)
-            return (false, new PostNewsResponse());
+            return (false, new PostNewsResponse { ErrorMessage = validation.Item2 });
 
         await newsRepository.AddAsync(news);
-
-        return (true, MapToPostResponse(news));
+        return (true, NewsMapper.ToPostResponse(news));
     }
 
     public async Task<(bool, DeleteNewsResponse)> DeleteNews(Guid Id)
@@ -73,16 +85,15 @@ public class NewsAppService(
         var existingNews = await newsRepository.GetByIdAsync(Id);
 
         if (existingNews is null)
-            return (false, new DeleteNewsResponse());
+            return (false, new DeleteNewsResponse { ErrorMessage = "News not found." });
 
         var validation = await newsDomainService.DeleteNewsAsync(Id);
 
         if (!validation.Item1)
-            return (false, new DeleteNewsResponse());
+            return (false, new DeleteNewsResponse { ErrorMessage = validation.Item2 });
 
         await newsRepository.DeleteAsync(Id);
-
-        return (true, MapToDeleteResponse(existingNews));
+        return (true, NewsMapper.ToDeleteResponse(existingNews));
     }
 
     public async Task<(bool, PatchNewsResponse)> PatchNews(PatchNewsRequest request)
@@ -90,7 +101,7 @@ public class NewsAppService(
         var existingNews = await newsRepository.GetByIdAsync(request.Id);
 
         if (existingNews is null)
-            return (false, new PatchNewsResponse());
+            return (false, new PatchNewsResponse { ErrorMessage = "News not found." });
 
         existingNews.Title = request.Title ?? existingNews.Title;
         existingNews.Content = request.Content ?? existingNews.Content;
@@ -106,100 +117,9 @@ public class NewsAppService(
         var validation = await newsDomainService.UpdateNewsAsync(existingNews);
 
         if (!validation.Item1)
-            return (false, new PatchNewsResponse());
+            return (false, new PatchNewsResponse { ErrorMessage = validation.Item2 });
 
         await newsRepository.UpdateAsync(existingNews);
-
-        return (true, MapToPatchResponse(existingNews));
-    }
-
-    private static GetByIdResponse MapToGetByIdResponse(News news)
-    {
-        return new GetByIdResponse
-        {
-            Id = news.Id,
-            Title = news.Title,
-            Content = news.Content,
-            ImageBase64 = news.ImageBase64,
-            ImageCaption = news.ImageCaption,
-            Content2 = news.Content2,
-            Image2Base64 = news.Image2Base64,
-            Image2Caption = news.Image2Caption,
-            Content3 = news.Content3,
-            Image3Base64 = news.Image3Base64,
-            Image3Caption = news.Image3Caption
-        };
-    }
-
-    private static GetByNameResponse MapToGetByNameResponse(News news)
-    {
-        return new GetByNameResponse
-        {
-            Id = news.Id,
-            Title = news.Title,
-            Content = news.Content,
-            ImageBase64 = news.ImageBase64,
-            ImageCaption = news.ImageCaption,
-            Content2 = news.Content2,
-            Image2Base64 = news.Image2Base64,
-            Image2Caption = news.Image2Caption,
-            Content3 = news.Content3,
-            Image3Base64 = news.Image3Base64,
-            Image3Caption = news.Image3Caption
-        };
-    }
-
-    private static PostNewsResponse MapToPostResponse(News news)
-    {
-        return new PostNewsResponse
-        {
-            Id = news.Id,
-            Title = news.Title,
-            Content = news.Content,
-            ImageBase64 = news.ImageBase64,
-            ImageCaption = news.ImageCaption,
-            Content2 = news.Content2,
-            Image2Base64 = news.Image2Base64,
-            Image2Caption = news.Image2Caption,
-            Content3 = news.Content3,
-            Image3Base64 = news.Image3Base64,
-            Image3Caption = news.Image3Caption
-        };
-    }
-
-    private static PatchNewsResponse MapToPatchResponse(News news)
-    {
-        return new PatchNewsResponse
-        {
-            Id = news.Id,
-            Title = news.Title,
-            Content = news.Content,
-            ImageBase64 = news.ImageBase64,
-            ImageCaption = news.ImageCaption,
-            Content2 = news.Content2,
-            Image2Base64 = news.Image2Base64,
-            Image2Caption = news.Image2Caption,
-            Content3 = news.Content3,
-            Image3Base64 = news.Image3Base64,
-            Image3Caption = news.Image3Caption
-        };
-    }
-
-    private static DeleteNewsResponse MapToDeleteResponse(News news)
-    {
-        return new DeleteNewsResponse
-        {
-            Id = news.Id,
-            Title = news.Title,
-            Content = news.Content,
-            ImageBase64 = news.ImageBase64,
-            ImageCaption = news.ImageCaption,
-            Content2 = news.Content2,
-            Image2Base64 = news.Image2Base64,
-            Image2Caption = news.Image2Caption,
-            Content3 = news.Content3,
-            Image3Base64 = news.Image3Base64,
-            Image3Caption = news.Image3Caption
-        };
+        return (true, NewsMapper.ToPatchResponse(existingNews));
     }
 }

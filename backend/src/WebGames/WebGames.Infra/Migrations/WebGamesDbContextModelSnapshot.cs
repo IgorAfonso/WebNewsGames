@@ -36,17 +36,50 @@ partial class WebGamesDbContextModelSnapshot : ModelSnapshot
                 .HasColumnType("text")
                 .HasColumnName("conteudo");
 
+            b.Property<string>("Content2")
+                .HasColumnType("text")
+                .HasColumnName("conteudo_2");
+
+            b.Property<string>("Content3")
+                .HasColumnType("text")
+                .HasColumnName("conteudo_3");
+
             b.Property<DateTime>("CreateDate")
                 .HasColumnType("timestamp with time zone")
                 .HasColumnName("data_criacao");
 
+            b.Property<string>("Image2Base64")
+                .HasColumnType("text")
+                .HasColumnName("imagem_2_base64");
+
+            b.Property<string>("Image2Caption")
+                .HasMaxLength(300)
+                .HasColumnType("character varying(300)")
+                .HasColumnName("legenda_imagem_2");
+
+            b.Property<string>("Image3Base64")
+                .HasColumnType("text")
+                .HasColumnName("imagem_3_base64");
+
+            b.Property<string>("Image3Caption")
+                .HasMaxLength(300)
+                .HasColumnType("character varying(300)")
+                .HasColumnName("legenda_imagem_3");
+
+            b.Property<string>("ImageBase64")
+                .IsRequired()
+                .HasColumnType("text")
+                .HasColumnName("imagem_base64");
+
+            b.Property<string>("ImageCaption")
+                .IsRequired()
+                .HasMaxLength(300)
+                .HasColumnType("character varying(300)")
+                .HasColumnName("legenda_imagem");
+
             b.Property<DateTime>("PublishedDate")
                 .HasColumnType("timestamp with time zone")
                 .HasColumnName("data_publicacao");
-
-            b.Property<string>("SecondContent")
-                .HasColumnType("text")
-                .HasColumnName("conteudo_secundario");
 
             b.Property<string>("Title")
                 .IsRequired()
@@ -76,13 +109,17 @@ partial class WebGamesDbContextModelSnapshot : ModelSnapshot
 
             b.Property<string>("Description")
                 .IsRequired()
-                .HasMaxLength(1000)
-                .HasColumnType("character varying(1000)")
+                .HasMaxLength(500)
+                .HasColumnType("character varying(500)")
                 .HasColumnName("descricao");
 
             b.Property<DateTime>("EndDate")
                 .HasColumnType("timestamp with time zone")
                 .HasColumnName("data_fim");
+
+            b.Property<bool>("IsExhibitionOnly")
+                .HasColumnType("boolean")
+                .HasColumnName("apenas_exibicional");
 
             b.Property<string>("Name")
                 .IsRequired()
@@ -90,9 +127,21 @@ partial class WebGamesDbContextModelSnapshot : ModelSnapshot
                 .HasColumnType("character varying(200)")
                 .HasColumnName("nome");
 
+            b.Property<string>("Place")
+                .IsRequired()
+                .HasMaxLength(300)
+                .HasColumnType("character varying(300)")
+                .HasColumnName("local");
+
             b.Property<DateTime>("StartDate")
                 .HasColumnType("timestamp with time zone")
                 .HasColumnName("data_inicio");
+
+            b.Property<string>("System")
+                .IsRequired()
+                .HasMaxLength(100)
+                .HasColumnType("character varying(100)")
+                .HasColumnName("sistema");
 
             b.Property<DateTime>("UpdateDate")
                 .HasColumnType("timestamp with time zone")
@@ -115,9 +164,46 @@ partial class WebGamesDbContextModelSnapshot : ModelSnapshot
                 .HasColumnType("text")
                 .HasColumnName("conteudo");
 
+            b.Property<string>("Content2")
+                .HasColumnType("text")
+                .HasColumnName("conteudo_2");
+
+            b.Property<string>("Content3")
+                .HasColumnType("text")
+                .HasColumnName("conteudo_3");
+
             b.Property<DateTime>("CreateDate")
                 .HasColumnType("timestamp with time zone")
                 .HasColumnName("data_criacao");
+
+            b.Property<string>("Image2Base64")
+                .HasColumnType("text")
+                .HasColumnName("imagem_2_base64");
+
+            b.Property<string>("Image2Caption")
+                .HasMaxLength(300)
+                .HasColumnType("character varying(300)")
+                .HasColumnName("legenda_imagem_2");
+
+            b.Property<string>("Image3Base64")
+                .HasColumnType("text")
+                .HasColumnName("imagem_3_base64");
+
+            b.Property<string>("Image3Caption")
+                .HasMaxLength(300)
+                .HasColumnType("character varying(300)")
+                .HasColumnName("legenda_imagem_3");
+
+            b.Property<string>("ImageBase64")
+                .IsRequired()
+                .HasColumnType("text")
+                .HasColumnName("imagem_base64");
+
+            b.Property<string>("ImageCaption")
+                .IsRequired()
+                .HasMaxLength(300)
+                .HasColumnType("character varying(300)")
+                .HasColumnName("legenda_imagem");
 
             b.Property<DateTime>("PublishedAt")
                 .HasColumnType("timestamp with time zone")

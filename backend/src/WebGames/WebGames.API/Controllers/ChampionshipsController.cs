@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using WebGames.Application.AppService.Interface;
+using WebGames.Application.Request;
 using WebGames.Application.Request.Championship;
 
 namespace WebGames.API.Controllers;
@@ -8,12 +9,12 @@ namespace WebGames.API.Controllers;
 [Route("/api/v1/championship")]
 public class ChampionshipsController(IChampionshipAppService championshipAppService) : BaseController
 {
-    private IChampionshipAppService _championshipAppService = championshipAppService;
+    private readonly IChampionshipAppService _championshipAppService = championshipAppService;
 
     [HttpGet]
-    public async Task<IActionResult> GetByName([FromQuery] string request)
+    public async Task<IActionResult> GetAll([FromQuery] PaginationRequest request)
     {
-        var appService = await _championshipAppService.GetByName(request);
+        var appService = await _championshipAppService.GetAll(request);
         return CustomResponse(appService.Item1, appService.Item2);
     }
 

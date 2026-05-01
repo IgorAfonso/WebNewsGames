@@ -1,5 +1,8 @@
 using WebGames.Application.AppService.Interface;
+using WebGames.Application.Mappers;
+using WebGames.Application.Request;
 using WebGames.Application.Request.Championship;
+using WebGames.Application.Response;
 using WebGames.Application.Response.Championship;
 using WebGames.Domain.Entities;
 using WebGames.Domain.Interface.Repository;
@@ -11,21 +14,45 @@ public class ChampionshipAppService(
     IChampionshipRepository championshipRepository,
     IChampionshipDomainService championshipDomainService) : IChampionshipAppService
 {
+    public async Task<(bool, PagedResponse<GetByIdResponse>)> GetAll(PaginationRequest request)
+    {
+        var pagination = PaginationAppService.Validate(request);
+
+        if (!pagination.Success)
+            return (false, new PagedResponse<GetByIdResponse> { ErrorMessage = pagination.ErrorMessage });
+
+        var championships = await championshipRepository.GetAllAsync();
+        var totalItems = championships.Count;
+        var items = championships
+            .Skip((pagination.Page - 1) * pagination.PageSize)
+            .Take(pagination.PageSize)
+            .Select(ChampionshipMapper.ToGetByIdResponse)
+            .ToList();
+
+        return (true, new PagedResponse<GetByIdResponse>
+        {
+            Items = items,
+            Page = pagination.Page,
+            PageSize = pagination.PageSize,
+            TotalItems = totalItems,
+            TotalPages = (int)Math.Ceiling(totalItems / (double)pagination.PageSize)
+        });
+    }
+
     public async Task<(bool, DeleteChampionshipResponse)> DeleteChamp(Guid Id)
     {
         var existingChampionship = await championshipRepository.GetByIdAsync(Id);
 
         if (existingChampionship is null)
-            return (false, new DeleteChampionshipResponse());
+            return (false, new DeleteChampionshipResponse { ErrorMessage = "Championship not found." });
 
         var validation = await championshipDomainService.DeleteChampionshipAsync(Id);
 
         if (!validation.Item1)
-            return (false, new DeleteChampionshipResponse());
+            return (false, new DeleteChampionshipResponse { ErrorMessage = validation.Item2 });
 
         await championshipRepository.DeleteAsync(Id);
-
-        return (true, MapToDeleteResponse(existingChampionship));
+        return (true, ChampionshipMapper.ToDeleteResponse(existingChampionship));
     }
 
     public async Task<(bool, GetByIdResponse)> GetById(Guid Id)
@@ -33,29 +60,14 @@ public class ChampionshipAppService(
         var validation = await championshipDomainService.GetChampionshipByIdAsync(Id);
 
         if (!validation.Item1)
-            return (false, new GetByIdResponse());
+            return (false, new GetByIdResponse { ErrorMessage = validation.Item2 });
 
         var championship = await championshipRepository.GetByIdAsync(Id);
 
         if (championship is null)
-            return (false, new GetByIdResponse());
+            return (false, new GetByIdResponse { ErrorMessage = "Championship not found." });
 
-        return (true, MapToGetByIdResponse(championship));
-    }
-
-    public async Task<(bool, GetByNameResponse)> GetByName(string request)
-    {
-        if (string.IsNullOrWhiteSpace(request))
-            return (false, new GetByNameResponse());
-
-        var championships = await championshipRepository.GetAllAsync();
-        var championship = championships.FirstOrDefault(item =>
-            string.Equals(item.Name, request, StringComparison.OrdinalIgnoreCase));
-
-        if (championship is null)
-            return (false, new GetByNameResponse());
-
-        return (true, MapToGetByNameResponse(championship));
+        return (true, ChampionshipMapper.ToGetByIdResponse(championship));
     }
 
     public async Task<(bool, PatchChampionshipResponse)> PatchChamp(PatchChampionshipRequest request)
@@ -63,21 +75,23 @@ public class ChampionshipAppService(
         var existingChampionship = await championshipRepository.GetByIdAsync(request.ChampId);
 
         if (existingChampionship is null)
-            return (false, new PatchChampionshipResponse());
+            return (false, new PatchChampionshipResponse { ErrorMessage = "Championship not found." });
 
         existingChampionship.Name = request.ChampionshipName ?? existingChampionship.Name;
         existingChampionship.Description = request.ChampionshipDescription ?? existingChampionship.Description;
-        existingChampionship.StartDate = request.ChampDate ?? existingChampionship.StartDate;
-        existingChampionship.EndDate = request.RegistrationDeadLine ?? existingChampionship.EndDate;
+        existingChampionship.System = request.ChampionshipSystem ?? existingChampionship.System;
+        existingChampionship.Place = request.Place ?? existingChampionship.Place;
+        existingChampionship.StartDate = request.StartDate ?? existingChampionship.StartDate;
+        existingChampionship.EndDate = request.EndDate ?? existingChampionship.EndDate;
+        existingChampionship.IsExhibitionOnly = true;
 
         var validation = await championshipDomainService.UpdateChampionshipAsync(existingChampionship);
 
         if (!validation.Item1)
-            return (false, new PatchChampionshipResponse());
+            return (false, new PatchChampionshipResponse { ErrorMessage = validation.Item2 });
 
         await championshipRepository.UpdateAsync(existingChampionship);
-
-        return (true, MapToPatchResponse(existingChampionship));
+        return (true, ChampionshipMapper.ToPatchResponse(existingChampionship));
     }
 
     public async Task<(bool, PostChampionshipResponse)> PostChamp(PostChampionshipRequest request)
@@ -86,77 +100,19 @@ public class ChampionshipAppService(
         {
             Name = request.ChampionshipName,
             Description = request.ChampionshipDescription,
-            StartDate = request.ChampDate ?? DateTime.UtcNow,
-            EndDate = request.RegistrationDeadLine ?? DateTime.UtcNow
+            System = request.ChampionshipSystem,
+            Place = request.Place,
+            StartDate = request.StartDate ?? default,
+            EndDate = request.EndDate ?? default,
+            IsExhibitionOnly = true
         };
 
         var validation = await championshipDomainService.CreateChampionshipAsync(championship);
 
         if (!validation.Item1)
-            return (false, new PostChampionshipResponse());
+            return (false, new PostChampionshipResponse { ErrorMessage = validation.Item2 });
 
         await championshipRepository.AddAsync(championship);
-
-        return (true, MapToPostResponse(championship));
-    }
-
-    private static GetByIdResponse MapToGetByIdResponse(Championship championship)
-    {
-        return new GetByIdResponse
-        {
-            ChampId = championship.Id,
-            ChampionshipName = championship.Name,
-            ChampionshipDescription = championship.Description,
-            RegistrationDeadLine = championship.EndDate,
-            ChampDate = championship.StartDate
-        };
-    }
-
-    private static GetByNameResponse MapToGetByNameResponse(Championship championship)
-    {
-        return new GetByNameResponse
-        {
-            ChampId = championship.Id,
-            ChampionshipName = championship.Name,
-            ChampionshipDescription = championship.Description,
-            RegistrationDeadLine = championship.EndDate,
-            ChampDate = championship.StartDate
-        };
-    }
-
-    private static PostChampionshipResponse MapToPostResponse(Championship championship)
-    {
-        return new PostChampionshipResponse
-        {
-            ChampId = championship.Id,
-            ChampionshipName = championship.Name,
-            ChampionshipDescription = championship.Description,
-            RegistrationDeadLine = championship.EndDate,
-            ChampDate = championship.StartDate
-        };
-    }
-
-    private static PatchChampionshipResponse MapToPatchResponse(Championship championship)
-    {
-        return new PatchChampionshipResponse
-        {
-            ChampId = championship.Id,
-            ChampionshipName = championship.Name,
-            ChampionshipDescription = championship.Description,
-            RegistrationDeadLine = championship.EndDate,
-            ChampDate = championship.StartDate
-        };
-    }
-
-    private static DeleteChampionshipResponse MapToDeleteResponse(Championship championship)
-    {
-        return new DeleteChampionshipResponse
-        {
-            ChampId = championship.Id,
-            ChampionshipName = championship.Name,
-            ChampionshipDescription = championship.Description,
-            RegistrationDeadLine = championship.EndDate,
-            ChampDate = championship.StartDate
-        };
+        return (true, ChampionshipMapper.ToPostResponse(championship));
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace WebGames.Application.Response.Articles;
+using WebGames.Application.Response;
 
-public class DeleteArticleResponse
+namespace WebGames.Application.Response.Articles;
+
+public class DeleteArticleResponse : ErrorResponse
 {
     public Guid Id { get; set; }
     public string? Title { get; set; }

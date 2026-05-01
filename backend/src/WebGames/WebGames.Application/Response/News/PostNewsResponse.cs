@@ -1,6 +1,8 @@
-﻿namespace WebGames.Application.Response.News;
+using WebGames.Application.Response;
 
-public class PostNewsResponse
+namespace WebGames.Application.Response.News;
+
+public class PostNewsResponse : ErrorResponse
 {
     public Guid Id { get; set; }
     public string? Title { get; set; }

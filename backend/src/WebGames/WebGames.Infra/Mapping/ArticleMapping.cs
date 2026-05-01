@@ -24,8 +24,34 @@ public class ArticleMapping : IEntityTypeConfiguration<Article>
             .HasColumnName("conteudo")
             .IsRequired();
 
-        builder.Property(article => article.SecondContent)
-            .HasColumnName("conteudo_secundario");
+        builder.Property(article => article.ImageBase64)
+            .HasColumnName("imagem_base64")
+            .IsRequired();
+
+        builder.Property(article => article.ImageCaption)
+            .HasColumnName("legenda_imagem")
+            .HasMaxLength(300)
+            .IsRequired();
+
+        builder.Property(article => article.Content2)
+            .HasColumnName("conteudo_2");
+
+        builder.Property(article => article.Image2Base64)
+            .HasColumnName("imagem_2_base64");
+
+        builder.Property(article => article.Image2Caption)
+            .HasColumnName("legenda_imagem_2")
+            .HasMaxLength(300);
+
+        builder.Property(article => article.Content3)
+            .HasColumnName("conteudo_3");
+
+        builder.Property(article => article.Image3Base64)
+            .HasColumnName("imagem_3_base64");
+
+        builder.Property(article => article.Image3Caption)
+            .HasColumnName("legenda_imagem_3")
+            .HasMaxLength(300);
 
         builder.Property(article => article.AuthorId)
             .HasColumnName("autor_id");

@@ -22,7 +22,21 @@ public class ChampionshipMapping : IEntityTypeConfiguration<Championship>
 
         builder.Property(championship => championship.Description)
             .HasColumnName("descricao")
-            .HasMaxLength(1000)
+            .HasMaxLength(500)
+            .IsRequired();
+
+        builder.Property(championship => championship.System)
+            .HasColumnName("sistema")
+            .HasMaxLength(100)
+            .IsRequired();
+
+        builder.Property(championship => championship.Place)
+            .HasColumnName("local")
+            .HasMaxLength(300)
+            .IsRequired();
+
+        builder.Property(championship => championship.IsExhibitionOnly)
+            .HasColumnName("apenas_exibicional")
             .IsRequired();
 
         builder.Property(championship => championship.StartDate)

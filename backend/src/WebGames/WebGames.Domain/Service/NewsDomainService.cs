@@ -6,12 +6,10 @@ namespace WebGames.Domain.Service;
 public class NewsDomainService : INewsDomainService
 {
     private const int TitleMaxLength = 200;
+    private const int ContentMaxLength = 5000;
+    private const int CaptionMaxLength = 700;
 
-    public async Task<(bool, string)> CreateNewsAsync(News request)
-    {
-        return ValidateNews(request);
-    }
-
+    public async Task<(bool, string)> CreateNewsAsync(News request) => ValidateNews(request);
     public async Task<(bool, string)> GetNewsByIdAsync(Guid id)
     {
         if(id == Guid.Empty)
@@ -42,7 +40,7 @@ public class NewsDomainService : INewsDomainService
             return (false, "Title cannot be null or empty.");
 
         if (request.Title.Length > TitleMaxLength)
-            return (false, "Title cannot exceed 200 characters.");
+            return (false, "The title cannot contain more than 200 characters.");
 
         var contentValidation = ValidateContentBlock(request.Content, request.ImageBase64, request.ImageCaption, true, "1");
 
@@ -69,13 +67,19 @@ public class NewsDomainService : INewsDomainService
         var hasCaption = !string.IsNullOrWhiteSpace(imageCaption);
 
         if (required && (!hasContent || !hasImage || !hasCaption))
-            return (false, $"Content, image and image caption are required for block {blockNumber}.");
+            return (false, "The minimum structure must contain at least one title, one content, one image and one caption.");
 
         if (!required && !hasContent && !hasImage && !hasCaption)
             return (true, string.Empty);
 
         if (!hasContent || !hasImage || !hasCaption)
             return (false, $"Content, image and image caption must be provided together for block {blockNumber}.");
+
+        if (content!.Length > ContentMaxLength)
+            return (false, "The content cannot contain more than 5000 characters.");
+
+        if (imageCaption!.Length > CaptionMaxLength)
+            return (false, "The caption cannot contain more than 700 characters.");
 
         if (!IsValidBase64Image(imageBase64))
             return (false, $"Image {blockNumber} must be a valid base64 value.");

@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using WebGames.Application.AppService.Interface;
+using WebGames.Application.Request;
 using WebGames.Application.Request.News;
 
 namespace WebGames.API.Controllers;
@@ -8,16 +9,16 @@ namespace WebGames.API.Controllers;
 [ApiController]
 public class NewsController(INewsAppService newsAppservice) : BaseController
 {
-    private INewsAppService _newsAppservice = newsAppservice;
+    private readonly INewsAppService _newsAppservice = newsAppservice;
 
-    [HttpGet("id")]
-    public async Task<IActionResult> GetByName([FromQuery] string request)
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] PaginationRequest request)
     {
-        var appService = await _newsAppservice.GetByName(request);
+        var appService = await _newsAppservice.GetAll(request);
         return CustomResponse(appService.Item1, appService.Item2);
     }
 
-    [HttpGet]
+    [HttpGet("id")]
     public async Task<IActionResult> GetById([FromQuery] Guid Id)
     {
         var appService = await _newsAppservice.GetById(Id);

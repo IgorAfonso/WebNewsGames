@@ -1,6 +1,8 @@
-﻿namespace WebGames.Application.Response.Articles;
+using WebGames.Application.Response;
 
-public class GetByIdResponse
+namespace WebGames.Application.Response.Articles;
+
+public class GetByIdResponse : ErrorResponse
 {
     public Guid Id { get; set; }
     public string? Title { get; set; }
