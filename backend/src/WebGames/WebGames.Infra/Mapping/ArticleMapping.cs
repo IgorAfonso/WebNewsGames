@@ -56,6 +56,14 @@ public class ArticleMapping : IEntityTypeConfiguration<Article>
         builder.Property(article => article.AuthorId)
             .HasColumnName("autor_id");
 
+        builder.Property(article => article.AuthorUserId)
+            .HasColumnName("autor_usuario_id")
+            .HasMaxLength(450);
+
+        builder.Property(article => article.AuthorName)
+            .HasColumnName("autor_nome")
+            .HasMaxLength(256);
+
         builder.Property(article => article.PublishedDate)
             .HasColumnName("data_publicacao");
 

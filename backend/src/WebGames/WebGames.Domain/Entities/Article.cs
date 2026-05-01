@@ -14,4 +14,6 @@ public class Article : BaseEntity
     public string? Image3Caption { get; set; }
     public DateTime PublishedDate { get; set; }
     public Guid? AuthorId { get; set; }
+    public string? AuthorUserId { get; set; }
+    public string? AuthorName { get; set; }
 }

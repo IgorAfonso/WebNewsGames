@@ -19,7 +19,8 @@ public static class ArticleMapper
             Image2Caption = article.Image2Caption,
             Content3 = article.Content3,
             Image3Base64 = article.Image3Base64,
-            Image3Caption = article.Image3Caption
+            Image3Caption = article.Image3Caption,
+            AuthorName = article.AuthorName
         };
     }
 
@@ -37,7 +38,8 @@ public static class ArticleMapper
             Image2Caption = article.Image2Caption,
             Content3 = article.Content3,
             Image3Base64 = article.Image3Base64,
-            Image3Caption = article.Image3Caption
+            Image3Caption = article.Image3Caption,
+            AuthorName = article.AuthorName
         };
     }
 
@@ -55,7 +57,8 @@ public static class ArticleMapper
             Image2Caption = article.Image2Caption,
             Content3 = article.Content3,
             Image3Base64 = article.Image3Base64,
-            Image3Caption = article.Image3Caption
+            Image3Caption = article.Image3Caption,
+            AuthorName = article.AuthorName
         };
     }
 
@@ -73,7 +76,8 @@ public static class ArticleMapper
             Image2Caption = article.Image2Caption,
             Content3 = article.Content3,
             Image3Base64 = article.Image3Base64,
-            Image3Caption = article.Image3Caption
+            Image3Caption = article.Image3Caption,
+            AuthorName = article.AuthorName
         };
     }
 }

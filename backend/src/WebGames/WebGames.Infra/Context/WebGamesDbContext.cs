@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WebGames.Domain.Entities;
 
 namespace WebGames.Infra.Context;
 
-public class WebGamesDbContext(DbContextOptions<WebGamesDbContext> options) : DbContext(options)
+public class WebGamesDbContext(DbContextOptions<WebGamesDbContext> options)
+    : IdentityDbContext<IdentityUser, IdentityRole, string>(options)
 {
     public DbSet<Article> Artigos => Set<Article>();
     public DbSet<Championship> Campeonatos => Set<Championship>();
@@ -11,8 +14,7 @@ public class WebGamesDbContext(DbContextOptions<WebGamesDbContext> options) : Db
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(WebGamesDbContext).Assembly);
-
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(WebGamesDbContext).Assembly);
     }
 }

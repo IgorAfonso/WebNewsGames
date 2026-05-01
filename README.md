@@ -34,6 +34,7 @@ backend/src/WebGames/
 ├── WebGames.Application/            # AppServices, requests e responses da API
 ├── WebGames.Domain/                 # Entidades, interfaces e serviços de domínio
 ├── WebGames.Infra/                  # EF Core, DbContext, mappings, migrations e repositories
+├── WebGames.CrossCutting.Authentication/ # Identity, JWT Bearer, usuário atual e seed de autenticação
 ├── WebGames.Infra.CrossCutting/     # Projeto cross-cutting base
 ├── WebGames.Infra.CrossCutting.IoC/ # Registro de injeção de dependência
 ├── WebGames.Test/                   # Projeto de testes
@@ -48,6 +49,7 @@ backend/src/WebGames/
 | `WebGames.Application` | Define contratos de entrada e saída e centraliza AppServices que orquestram operações da aplicação. |
 | `WebGames.Domain` | Contém entidades, contratos de repositório, contratos de serviços de domínio e validações de regra de negócio. |
 | `WebGames.Infra` | Implementa acesso a dados com EF Core, `DbContext`, mapeamentos, migrations e repositories. |
+| `WebGames.CrossCutting.Authentication` | Centraliza configuração do ASP.NET Core Identity, JWT Bearer, serviços de autenticação, usuário atual e seed de roles/manager. |
 | `WebGames.Infra.CrossCutting.IoC` | Registra dependências da aplicação, domínio, repositórios e `DbContext`. |
 | `WebGames.Test` | Projeto reservado para testes automatizados com NUnit. |
 
@@ -89,6 +91,63 @@ A política `DevelopmentCorsPolicy` permite chamadas do frontend nas seguintes o
 - `https://localhost:3001`
 
 Se o frontend rodar em outra porta, ajuste a lista em `WebGames.API/Program.cs`.
+
+### Autenticação e autorização
+
+O backend usa ASP.NET Core Identity com JWT Bearer.
+
+Papéis:
+
+- `Administrator`
+- `User`
+
+Usuário administrador padrão:
+
+- usuário: `manager`
+- senha: `webnews123`
+
+Esse usuário é criado automaticamente na inicialização da API, junto com os papéis necessários.
+
+Endpoints:
+
+| Método | Rota | Autenticação | Descrição |
+| --- | --- | --- | --- |
+| `POST` | `/api/v1/auth/login` | Não | Autentica usuário e retorna token Bearer. |
+| `POST` | `/api/v1/auth/users` | Não | Cria usuário comum. |
+| `POST` | `/api/v1/auth/admins` | `Administrator` | Cria usuário administrador. |
+
+Body de login:
+
+```json
+{
+  "userName": "manager",
+  "password": "webnews123"
+}
+```
+
+Body de criação de usuário:
+
+```json
+{
+  "userName": "player1",
+  "password": "webnews123"
+}
+```
+
+Use o token retornado no header:
+
+```text
+Authorization: Bearer {token}
+```
+
+Regras atuais:
+
+- Consultas `GET` permanecem públicas.
+- Criação, alteração e exclusão de campeonatos exigem `Administrator`.
+- Criação, alteração e exclusão de notícias exigem `Administrator`.
+- Criação de artigos aceita `Administrator` ou `User`.
+- Alteração e exclusão de artigos aceitam `Administrator` ou o usuário autor do artigo.
+- Ao criar notícia ou artigo, o backend grava `AuthorUserId` e `AuthorName`.
 
 ### Injeção de dependência
 
@@ -137,6 +196,7 @@ Migration existente:
 - `20260501000000_InitialCreate`
 - `20260501010000_AddMediaFieldsToArticlesAndNews`
 - `20260501020000_UpdateChampionshipStructure`
+- `20260501214855_AddIdentityAuthentication`
 
 ### Entidades
 

@@ -56,6 +56,14 @@ public class NewsMapping : IEntityTypeConfiguration<News>
         builder.Property(news => news.PublishedAt)
             .HasColumnName("data_publicacao");
 
+        builder.Property(news => news.AuthorUserId)
+            .HasColumnName("autor_usuario_id")
+            .HasMaxLength(450);
+
+        builder.Property(news => news.AuthorName)
+            .HasColumnName("autor_nome")
+            .HasMaxLength(256);
+
         builder.Property(news => news.CreateDate)
             .HasColumnName("data_criacao")
             .IsRequired();

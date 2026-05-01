@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebGames.Application.AppService.Interface;
+using WebGames.Application.Auth;
 using WebGames.Application.Request;
 using WebGames.Application.Request.Articles;
 
@@ -25,6 +27,7 @@ public class ArticlesController(IArticlesAppService ariticlesAppserice) : BaseCo
         return CustomResponse(appService.Item1, appService.Item2);
     }
 
+    [Authorize(Roles = $"{AuthRoles.Administrator},{AuthRoles.User}")]
     [HttpPost]
     public async Task<IActionResult> PostNews([FromBody] PostArticleRequest request)
     {
@@ -32,6 +35,7 @@ public class ArticlesController(IArticlesAppService ariticlesAppserice) : BaseCo
         return PostResponse(appService.Item1, appService.Item2);
     }
 
+    [Authorize(Roles = $"{AuthRoles.Administrator},{AuthRoles.User}")]
     [HttpDelete]
     public async Task<IActionResult> DeleteNews([FromQuery] Guid Id)
     {
@@ -39,6 +43,7 @@ public class ArticlesController(IArticlesAppService ariticlesAppserice) : BaseCo
         return CustomResponse(appService.Item1, appService.Item2);
     }
 
+    [Authorize(Roles = $"{AuthRoles.Administrator},{AuthRoles.User}")]
     [HttpPatch]
     public async Task<IActionResult> PatchNews([FromBody] PatchArticleRequest request)
     {

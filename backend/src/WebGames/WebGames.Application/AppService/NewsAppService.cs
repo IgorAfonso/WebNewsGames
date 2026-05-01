@@ -1,4 +1,5 @@
 using WebGames.Application.AppService.Interface;
+using WebGames.Application.Auth;
 using WebGames.Application.Mappers;
 using WebGames.Application.Request;
 using WebGames.Application.Request.News;
@@ -12,7 +13,8 @@ namespace WebGames.Application.AppService;
 
 public class NewsAppService(
     INewsRepository newsRepository,
-    INewsDomainService newsDomainService) : INewsAppService
+    INewsDomainService newsDomainService,
+    ICurrentUserService currentUserService) : INewsAppService
 {
     public async Task<(bool, PagedResponse<GetByIdResponse>)> GetAll(PaginationRequest request)
     {
@@ -68,7 +70,9 @@ public class NewsAppService(
             Content3 = request.Content3,
             Image3Base64 = request.Image3Base64,
             Image3Caption = request.Image3Caption,
-            PublishedAt = DateTime.UtcNow
+            PublishedAt = DateTime.UtcNow,
+            AuthorUserId = currentUserService.UserId,
+            AuthorName = currentUserService.UserName
         };
 
         var validation = await newsDomainService.CreateNewsAsync(news);

@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebGames.Application.AppService.Interface;
+using WebGames.Application.Auth;
 using WebGames.Application.Request;
 using WebGames.Application.Request.News;
 
@@ -25,6 +27,7 @@ public class NewsController(INewsAppService newsAppservice) : BaseController
         return CustomResponse(appService.Item1, appService.Item2);
     }
 
+    [Authorize(Roles = AuthRoles.Administrator)]
     [HttpPost]
     public async Task<IActionResult> PostNews([FromBody] PostNewsRequest request)
     {
@@ -32,6 +35,7 @@ public class NewsController(INewsAppService newsAppservice) : BaseController
         return PostResponse(appService.Item1, appService.Item2);
     }
 
+    [Authorize(Roles = AuthRoles.Administrator)]
     [HttpDelete]
     public async Task<IActionResult> DeleteNews([FromQuery] Guid Id)
     {
@@ -39,6 +43,7 @@ public class NewsController(INewsAppService newsAppservice) : BaseController
         return CustomResponse(appService.Item1, appService.Item2);
     }
 
+    [Authorize(Roles = AuthRoles.Administrator)]
     [HttpPatch]
     public async Task<IActionResult> PatchNews([FromBody] PatchNewsRequest request)
     {

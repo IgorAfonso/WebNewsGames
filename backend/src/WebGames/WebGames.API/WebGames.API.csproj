@@ -69,6 +69,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebGames.Application\WebGames.Application.csproj" />
+    <ProjectReference Include="..\WebGames.CrossCutting.Authentication\WebGames.CrossCutting.Authentication.csproj" />
     <ProjectReference Include="..\WebGames.Infra.CrossCutting.IoC\WebGames.Infra.CrossCutting.IoC.csproj" />
   </ItemGroup>
 

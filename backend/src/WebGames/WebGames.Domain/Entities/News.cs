@@ -13,4 +13,6 @@ public class News : BaseEntity
     public string? Image3Base64 { get; set; }
     public string? Image3Caption { get; set; }
     public DateTime PublishedAt { get; set; }
+    public string? AuthorUserId { get; set; }
+    public string? AuthorName { get; set; }
 }

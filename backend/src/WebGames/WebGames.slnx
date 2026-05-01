@@ -13,6 +13,7 @@
     <Project Path="WebGames.Infra/WebGames.Infra.Data.csproj" />
   </Folder>
   <Folder Name="/4 - Infra/4.2 - CrossCutting/">
+    <Project Path="WebGames.CrossCutting.Authentication/WebGames.CrossCutting.Authentication.csproj" />
     <Project Path="WebGames.Infra.CrossCutting.IoC/WebGames.Infra.CrossCutting.IoC.csproj" Id="4b08dd49-422e-4718-b1b4-d06e2c226a61" />
     <Project Path="WebGames.Infra.CrossCutting/WebGames.Infra.CrossCutting.csproj" Id="600f45cc-d515-4880-9ca1-ee95a4713327" />
   </Folder>

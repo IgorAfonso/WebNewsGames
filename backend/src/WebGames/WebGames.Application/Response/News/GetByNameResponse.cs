@@ -15,4 +15,5 @@ public class GetByNameResponse : ErrorResponse
     public string? Content3 { get; set; }
     public string? Image3Base64 { get; set; }
     public string? Image3Caption { get; set; }
+    public string? AuthorName { get; set; }
 }

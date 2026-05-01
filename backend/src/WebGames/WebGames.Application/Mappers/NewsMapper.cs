@@ -19,7 +19,8 @@ public static class NewsMapper
             Image2Caption = news.Image2Caption,
             Content3 = news.Content3,
             Image3Base64 = news.Image3Base64,
-            Image3Caption = news.Image3Caption
+            Image3Caption = news.Image3Caption,
+            AuthorName = news.AuthorName
         };
     }
 
@@ -37,7 +38,8 @@ public static class NewsMapper
             Image2Caption = news.Image2Caption,
             Content3 = news.Content3,
             Image3Base64 = news.Image3Base64,
-            Image3Caption = news.Image3Caption
+            Image3Caption = news.Image3Caption,
+            AuthorName = news.AuthorName
         };
     }
 
@@ -55,7 +57,8 @@ public static class NewsMapper
             Image2Caption = news.Image2Caption,
             Content3 = news.Content3,
             Image3Base64 = news.Image3Base64,
-            Image3Caption = news.Image3Caption
+            Image3Caption = news.Image3Caption,
+            AuthorName = news.AuthorName
         };
     }
 
@@ -73,7 +76,8 @@ public static class NewsMapper
             Image2Caption = news.Image2Caption,
             Content3 = news.Content3,
             Image3Base64 = news.Image3Base64,
-            Image3Caption = news.Image3Caption
+            Image3Caption = news.Image3Caption,
+            AuthorName = news.AuthorName
         };
     }
 }

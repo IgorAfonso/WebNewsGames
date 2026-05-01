@@ -1,4 +1,5 @@
 using WebGames.Application.AppService.Interface;
+using WebGames.Application.Auth;
 using WebGames.Application.Mappers;
 using WebGames.Application.Request;
 using WebGames.Application.Request.Articles;
@@ -12,7 +13,8 @@ namespace WebGames.Application.AppService;
 
 public class ArticlesAppService(
     IArticleRepository articleRepository,
-    IArticleDomainService articleDomainService) : IArticlesAppService
+    IArticleDomainService articleDomainService,
+    ICurrentUserService currentUserService) : IArticlesAppService
 {
     public async Task<(bool, PagedResponse<GetByIdResponse>)> GetAll(PaginationRequest request)
     {
@@ -46,6 +48,9 @@ public class ArticlesAppService(
         if (existingArticle is null)
             return (false, new DeleteArticleResponse { ErrorMessage = "Article not found." });
 
+        if (!CanManageArticle(existingArticle))
+            return (false, new DeleteArticleResponse { ErrorMessage = "Only administrators or the article author can change this article." });
+
         var validation = await articleDomainService.DeleteArticleAsync(existingArticle);
 
         if (!validation.Item1)
@@ -76,6 +81,9 @@ public class ArticlesAppService(
 
         if (existingArticle is null)
             return (false, new PatchArticleResponse { ErrorMessage = "Article not found." });
+
+        if (!CanManageArticle(existingArticle))
+            return (false, new PatchArticleResponse { ErrorMessage = "Only administrators or the article author can change this article." });
 
         existingArticle.Title = request.Title ?? existingArticle.Title;
         existingArticle.Content = request.Content ?? existingArticle.Content;
@@ -112,7 +120,9 @@ public class ArticlesAppService(
             Content3 = request.Content3,
             Image3Base64 = request.Image3Base64,
             Image3Caption = request.Image3Caption,
-            PublishedDate = DateTime.UtcNow
+            PublishedDate = DateTime.UtcNow,
+            AuthorUserId = currentUserService.UserId,
+            AuthorName = currentUserService.UserName
         };
 
         var validation = await articleDomainService.CreateArticleAsync(article);
@@ -122,5 +132,15 @@ public class ArticlesAppService(
 
         await articleRepository.AddAsync(article);
         return (true, ArticleMapper.ToPostResponse(article));
+    }
+
+    private bool CanManageArticle(Article article)
+    {
+        if (currentUserService.IsInRole(AuthRoles.Administrator))
+            return true;
+
+        return currentUserService.IsAuthenticated &&
+            !string.IsNullOrWhiteSpace(article.AuthorUserId) &&
+            article.AuthorUserId == currentUserService.UserId;
     }
 }

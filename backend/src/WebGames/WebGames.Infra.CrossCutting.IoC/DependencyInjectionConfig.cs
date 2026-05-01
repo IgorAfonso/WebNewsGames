@@ -23,6 +23,7 @@ public static class DependencyInjectionConfig
         services.AddDbContext<WebGamesDbContext>(options => options.UseNpgsql(connectionString));
         // AppService
         services.AddScoped<IArticlesAppService, ArticlesAppService>();
+        services.AddScoped<IAuthAppService, AuthAppService>();
         services.AddScoped<IChampionshipAppService, ChampionshipAppService>();
         services.AddScoped<INewsAppService, NewsAppService>();
 

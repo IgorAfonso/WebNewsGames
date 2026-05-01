@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebGames.Infra.Context;
@@ -11,9 +12,11 @@ using WebGames.Infra.Context;
 namespace WebGames.Infra.Migrations
 {
     [DbContext(typeof(WebGamesDbContext))]
-    partial class WebGamesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260501214855_AddIdentityAuthentication")]
+    partial class AddIdentityAuthentication
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

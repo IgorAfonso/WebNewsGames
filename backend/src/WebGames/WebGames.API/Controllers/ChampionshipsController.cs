@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebGames.Application.AppService.Interface;
+using WebGames.Application.Auth;
 using WebGames.Application.Request;
 using WebGames.Application.Request.Championship;
 
@@ -25,6 +27,7 @@ public class ChampionshipsController(IChampionshipAppService championshipAppServ
         return CustomResponse(appService.Item1, appService.Item2);
     }
 
+    [Authorize(Roles = AuthRoles.Administrator)]
     [HttpPost]
     public async Task<IActionResult> PostChamp([FromBody] PostChampionshipRequest request)
     {
@@ -32,6 +35,7 @@ public class ChampionshipsController(IChampionshipAppService championshipAppServ
         return PostResponse(appService.Item1, appService.Item2);
     }
 
+    [Authorize(Roles = AuthRoles.Administrator)]
     [HttpDelete]
     public async Task<IActionResult> DeleteChamp([FromQuery] Guid Id)
     {
@@ -39,6 +43,7 @@ public class ChampionshipsController(IChampionshipAppService championshipAppServ
         return CustomResponse(appService.Item1, appService.Item2);
     }
 
+    [Authorize(Roles = AuthRoles.Administrator)]
     [HttpPatch]
     public async Task<IActionResult> PatchChamp([FromBody] PatchChampionshipRequest request)
     {
