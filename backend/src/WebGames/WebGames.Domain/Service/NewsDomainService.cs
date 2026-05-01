@@ -5,12 +5,11 @@ namespace WebGames.Domain.Service;
 
 public class NewsDomainService : INewsDomainService
 {
+    private const int TitleMaxLength = 200;
+
     public async Task<(bool, string)> CreateNewsAsync(News request)
     {
-        if(request.Title is null || request.Content is null)
-            return (false, "Title and Content cannot be null.");
-
-        return (true, "News created successfully.");
+        return ValidateNews(request);
     }
 
     public async Task<(bool, string)> GetNewsByIdAsync(Guid id)
@@ -23,10 +22,10 @@ public class NewsDomainService : INewsDomainService
 
     public async Task<(bool, string)> UpdateNewsAsync(News request)
     {
-        if(request.Id <= 0)
+        if(request.Id == Guid.Empty)
             return (false, "Invalid news ID.");
 
-        return (true, "News updated successfully.");
+        return ValidateNews(request);
     }
 
     public async Task<(bool, string)> DeleteNewsAsync(Guid id)
@@ -35,5 +34,67 @@ public class NewsDomainService : INewsDomainService
             return (false, "Invalid news ID.");
 
         return (true, "News deleted successfully.");
+    }
+
+    private static (bool, string) ValidateNews(News request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Title))
+            return (false, "Title cannot be null or empty.");
+
+        if (request.Title.Length > TitleMaxLength)
+            return (false, "Title cannot exceed 200 characters.");
+
+        var contentValidation = ValidateContentBlock(request.Content, request.ImageBase64, request.ImageCaption, true, "1");
+
+        if (!contentValidation.Item1)
+            return contentValidation;
+
+        var content2Validation = ValidateContentBlock(request.Content2, request.Image2Base64, request.Image2Caption, false, "2");
+
+        if (!content2Validation.Item1)
+            return content2Validation;
+
+        return ValidateContentBlock(request.Content3, request.Image3Base64, request.Image3Caption, false, "3");
+    }
+
+    private static (bool, string) ValidateContentBlock(
+        string? content,
+        string? imageBase64,
+        string? imageCaption,
+        bool required,
+        string blockNumber)
+    {
+        var hasContent = !string.IsNullOrWhiteSpace(content);
+        var hasImage = !string.IsNullOrWhiteSpace(imageBase64);
+        var hasCaption = !string.IsNullOrWhiteSpace(imageCaption);
+
+        if (required && (!hasContent || !hasImage || !hasCaption))
+            return (false, $"Content, image and image caption are required for block {blockNumber}.");
+
+        if (!required && !hasContent && !hasImage && !hasCaption)
+            return (true, string.Empty);
+
+        if (!hasContent || !hasImage || !hasCaption)
+            return (false, $"Content, image and image caption must be provided together for block {blockNumber}.");
+
+        if (!IsValidBase64Image(imageBase64))
+            return (false, $"Image {blockNumber} must be a valid base64 value.");
+
+        return (true, string.Empty);
+    }
+
+    private static bool IsValidBase64Image(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return false;
+
+        var base64 = value.Trim();
+        var commaIndex = base64.IndexOf(',');
+
+        if (commaIndex >= 0)
+            base64 = base64[(commaIndex + 1)..];
+
+        Span<byte> buffer = new byte[base64.Length];
+        return Convert.TryFromBase64String(base64, buffer, out _);
     }
 }

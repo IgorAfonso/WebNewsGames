@@ -5,10 +5,15 @@ namespace WebGames.Domain.Service;
 
 public class ChampionshipDomainService : IChampionshipDomainService
 {
+    private const int TitleMaxLength = 200;
+
     public async Task<(bool, string)> CreateChampionshipAsync(Championship request)
     {
         if (request.Name is null || request.Description is null)
             return (false, "Name and Description cannot be null.");
+
+        if (request.Name.Length > TitleMaxLength)
+            return (false, "Name cannot exceed 200 characters.");
 
         return (true, string.Empty);
     }
@@ -17,6 +22,9 @@ public class ChampionshipDomainService : IChampionshipDomainService
     {
         if (request.Name is null || request.Description is null)
             return (false, "Name and Description cannot be null.");
+
+        if (request.Name.Length > TitleMaxLength)
+            return (false, "Name cannot exceed 200 characters.");
 
         return (true, string.Empty);
     }
