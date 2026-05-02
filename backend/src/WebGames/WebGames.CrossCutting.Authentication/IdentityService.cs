@@ -22,7 +22,7 @@ public class IdentityService(
         var existingUser = await userManager.FindByNameAsync(userName);
 
         if (existingUser is not null)
-            return (false, "User already exists.", new AuthUserResponse());
+            return (false, "Não é possível criar com este usuário.", new AuthUserResponse());
 
         var user = new IdentityUser
         {
@@ -54,12 +54,12 @@ public class IdentityService(
         var user = await userManager.FindByNameAsync(userName);
 
         if (user is null)
-            return (false, "Invalid user name or password.", new LoginResponse());
+            return (false, "Usuário ou senha inválidos.", new LoginResponse());
 
         var signInResult = await signInManager.CheckPasswordSignInAsync(user, password, false);
 
         if (!signInResult.Succeeded)
-            return (false, "Invalid user name or password.", new LoginResponse());
+            return (false, "Usuário ou senha inválidos.", new LoginResponse());
 
         var roles = await userManager.GetRolesAsync(user);
         var expiresAt = DateTime.UtcNow.AddHours(8);
