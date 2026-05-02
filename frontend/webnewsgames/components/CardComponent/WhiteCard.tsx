@@ -1,24 +1,25 @@
 "use client";
+
 import { CardProps } from "@/types/CardProps";
 
 export default function DefaultCard(props: CardProps) {
   return (
-    <div className="flex flex-col p-5 gap-5 shadow-2xl justify-around w-full h-full bg-white border border-gray-500 rounded-lg">
-      <div className="gap-1">
-        <h1 className="font-bold">Título:</h1>
-        <h1>{props.title}</h1>
+    <div className="flex h-full w-full flex-col justify-between gap-5 rounded-lg bg-white p-5 shadow-xl">
+      <div className="space-y-1">
+        <h1 className="font-bold">Titulo:</h1>
+        <p>{props.title}</p>
       </div>
-      <div className="gap-1">
+      <div className="space-y-1">
         <h2 className="font-bold">Breve Resumo:</h2>
-        <h2>{props.description}</h2>
+        <p>{props.description}</p>
       </div>
-      <div className="gap-1">
-        <h3 className="font-bold">Usuário:</h3>
-        <h3>{props.user}</h3>
+      <div className="space-y-1">
+        <h3 className="font-bold">Usuario:</h3>
+        <p>{props.user}</p>
       </div>
       <button
-        onClick={() => alert("CLickou no Leia Mais")}
-        className="mt-4 text-accent hover:underline read-more"
+        onClick={() => alert("Clicou no Leia Mais")}
+        className="mt-4 self-start text-accent hover:underline read-more"
       >
         Leia Mais
       </button>

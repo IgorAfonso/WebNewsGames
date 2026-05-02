@@ -6,7 +6,7 @@ import MostRecentyChampionships from "@/components/MostRecentChampionshipsCompon
 export default function ChampionshipPage() {
   return (
     <div>
-      <GeneralHeader PageDescriptor="Campeonatos" />
+      <GeneralHeader PageDescriptor="Web News" />
       <MainChampionship />
       <MostRecentyChampionships />
       <Footer />

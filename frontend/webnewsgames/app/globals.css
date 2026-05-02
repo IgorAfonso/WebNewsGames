@@ -6,10 +6,10 @@
     --color-primary: #1e40af;
     --color-accent: #2563eb;
     --color-hoverBlue: #93c5fd;
-    --color-lightGray: #f3f4f6;
+    --color-lightGray: #eef2f7;
     --color-darkGray: #4b5563;
     --color-hoverDarkBlue: #1d4ed8;
-    --color-grey: #999999;
+    --color-grey: #ffffff;
 
     /* Fontes */
     --font-sans: Arial, sans-serif;
@@ -18,6 +18,7 @@
   /* Usar fonte personalizada no body */
   body {
     font-family: var(--font-sans);
+    background-color: var(--color-lightGray);
   }
 }
 

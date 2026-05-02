@@ -7,7 +7,7 @@ import GeneralHeader from "@/components/DefaultHeaderComponent/GeneralHeader";
 export default function CommunityPage() {
   return (
     <>
-      <GeneralHeader PageDescriptor="Comunidade" />
+      <GeneralHeader PageDescriptor="Web News" />
       <div className="bg-accent">
         <FindDiscutionsComponent />
       </div>
