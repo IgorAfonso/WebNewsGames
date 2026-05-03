@@ -32,7 +32,7 @@ export default function ThemeToggle({ className = "" }: { className?: string }) 
           )}
         </span>
       </span>
-      <span>Tema escuro</span>
+      <span>Tema</span>
     </button>
   );
 }

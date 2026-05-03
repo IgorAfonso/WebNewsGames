@@ -1,0 +1,659 @@
+{
+  "info": {
+    "_postman_id": "b861b736-5d51-4f5d-b3f5-3c64b7677a8f",
+    "name": "WebNewsGames API",
+    "description": "Collection gerada a partir dos controllers do backend WebNewsGames. Configure baseUrl e use Login para preencher token/tokenType automaticamente.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "tokenType",
+      "value": "Bearer",
+      "type": "string"
+    },
+    {
+      "key": "newsId",
+      "value": "9e00ff58-7549-41c6-8549-3e41ccb8aaca",
+      "type": "string"
+    },
+    {
+      "key": "articleId",
+      "value": "00000000-0000-0000-0000-000000000000",
+      "type": "string"
+    },
+    {
+      "key": "championshipId",
+      "value": "00000000-0000-0000-0000-000000000000",
+      "type": "string"
+    },
+    {
+      "key": "sampleImageBase64",
+      "value": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response && response.data && response.data.token) {",
+                  "  pm.collectionVariables.set('token', response.data.token);",
+                  "  pm.collectionVariables.set('tokenType', response.data.tokenType || 'Bearer');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"manager\",\n  \"password\": \"webnews123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"usuario_teste\",\n  \"password\": \"webnews123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "users"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"admin_teste\",\n  \"password\": \"webnews123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/admins",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "admins"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "News",
+      "item": [
+        {
+          "name": "Get All News",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/news?Page=1&PageSize=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "news"
+              ],
+              "query": [
+                {
+                  "key": "Page",
+                  "value": "1"
+                },
+                {
+                  "key": "PageSize",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get News By Id - Path",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/news/{{newsId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "news",
+                "{{newsId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get News By Id - Query Legacy",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/news/id?Id={{newsId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "news",
+                "id"
+              ],
+              "query": [
+                {
+                  "key": "Id",
+                  "value": "{{newsId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create News",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response && response.data && response.data.id) {",
+                  "  pm.collectionVariables.set('newsId', response.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Noticia criada pelo Postman\",\n  \"content\": \"Conteudo principal obrigatorio da noticia.\",\n  \"imageBase64\": \"{{sampleImageBase64}}\",\n  \"imageCaption\": \"Legenda da imagem principal.\",\n  \"content2\": null,\n  \"image2Base64\": null,\n  \"image2Caption\": null,\n  \"content3\": null,\n  \"image3Base64\": null,\n  \"image3Caption\": null\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/news",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "news"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update News",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{newsId}}\",\n  \"title\": \"Noticia atualizada pelo Postman\",\n  \"content\": \"Conteudo atualizado da noticia.\",\n  \"imageBase64\": \"{{sampleImageBase64}}\",\n  \"imageCaption\": \"Legenda atualizada da imagem principal.\",\n  \"content2\": \"Segundo bloco opcional.\",\n  \"image2Base64\": \"{{sampleImageBase64}}\",\n  \"image2Caption\": \"Legenda da segunda imagem.\",\n  \"content3\": null,\n  \"image3Base64\": null,\n  \"image3Caption\": null\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/news",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "news"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete News",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/news?Id={{newsId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "news"
+              ],
+              "query": [
+                {
+                  "key": "Id",
+                  "value": "{{newsId}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Articles",
+      "item": [
+        {
+          "name": "Get All Articles",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/article?Page=1&PageSize=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "article"
+              ],
+              "query": [
+                {
+                  "key": "Page",
+                  "value": "1"
+                },
+                {
+                  "key": "PageSize",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Article By Id - Path",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/article/{{articleId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "article",
+                "{{articleId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Article By Id - Query Legacy",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/article/id?Id={{articleId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "article",
+                "id"
+              ],
+              "query": [
+                {
+                  "key": "Id",
+                  "value": "{{articleId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Article",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response && response.data && response.data.id) {",
+                  "  pm.collectionVariables.set('articleId', response.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Artigo criado pelo Postman\",\n  \"content\": \"Conteudo principal obrigatorio do artigo.\",\n  \"imageBase64\": \"{{sampleImageBase64}}\",\n  \"imageCaption\": \"Legenda da imagem principal.\",\n  \"content2\": null,\n  \"image2Base64\": null,\n  \"image2Caption\": null,\n  \"content3\": null,\n  \"image3Base64\": null,\n  \"image3Caption\": null\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/article",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "article"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Article",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{articleId}}\",\n  \"title\": \"Artigo atualizado pelo Postman\",\n  \"content\": \"Conteudo atualizado do artigo.\",\n  \"imageBase64\": \"{{sampleImageBase64}}\",\n  \"imageCaption\": \"Legenda atualizada da imagem principal.\",\n  \"content2\": \"Segundo bloco opcional.\",\n  \"image2Base64\": \"{{sampleImageBase64}}\",\n  \"image2Caption\": \"Legenda da segunda imagem.\",\n  \"content3\": null,\n  \"image3Base64\": null,\n  \"image3Caption\": null\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/article",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "article"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Article",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/article?Id={{articleId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "article"
+              ],
+              "query": [
+                {
+                  "key": "Id",
+                  "value": "{{articleId}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Championships",
+      "item": [
+        {
+          "name": "Get All Championships",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/championship?Page=1&PageSize=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "championship"
+              ],
+              "query": [
+                {
+                  "key": "Page",
+                  "value": "1"
+                },
+                {
+                  "key": "PageSize",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Championship By Id - Path",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/championship/{{championshipId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "championship",
+                "{{championshipId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Championship By Id - Query Legacy",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/championship/id?Id={{championshipId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "championship",
+                "id"
+              ],
+              "query": [
+                {
+                  "key": "Id",
+                  "value": "{{championshipId}}"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Championship",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();",
+                  "if (response && response.data && response.data.id) {",
+                  "  pm.collectionVariables.set('championshipId', response.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"championshipName\": \"Campeonato Postman\",\n  \"championshipDescription\": \"Campeonato criado manualmente pelo Postman.\",\n  \"championshipSystem\": \"Mata-mata\",\n  \"place\": \"Online\",\n  \"startDate\": \"2026-06-01T19:00:00Z\",\n  \"endDate\": \"2026-06-02T22:00:00Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/championship",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "championship"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Championship",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"champId\": \"{{championshipId}}\",\n  \"championshipName\": \"Campeonato Postman Atualizado\",\n  \"championshipDescription\": \"Campeonato atualizado manualmente pelo Postman.\",\n  \"championshipSystem\": \"Pontos corridos\",\n  \"place\": \"Sao Paulo\",\n  \"startDate\": \"2026-06-03T19:00:00Z\",\n  \"endDate\": \"2026-06-04T22:00:00Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/championship",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "championship"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Championship",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/championship?Id={{championshipId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "championship"
+              ],
+              "query": [
+                {
+                  "key": "Id",
+                  "value": "{{championshipId}}"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

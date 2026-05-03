@@ -13,6 +13,7 @@ public class ChampionshipsController(IChampionshipAppService championshipAppServ
 {
     private readonly IChampionshipAppService _championshipAppService = championshipAppService;
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] PaginationRequest request)
     {
@@ -20,6 +21,15 @@ public class ChampionshipsController(IChampionshipAppService championshipAppServ
         return CustomResponse(appService.Item1, appService.Item2);
     }
 
+    [AllowAnonymous]
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetByIdPath(Guid id)
+    {
+        var appService = await _championshipAppService.GetById(id);
+        return CustomResponse(appService.Item1, appService.Item2);
+    }
+
+    [AllowAnonymous]
     [HttpGet("id")]
     public async Task<IActionResult> GetById([FromQuery] Guid Id)
     {

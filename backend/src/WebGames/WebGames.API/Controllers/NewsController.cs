@@ -13,6 +13,7 @@ public class NewsController(INewsAppService newsAppservice) : BaseController
 {
     private readonly INewsAppService _newsAppservice = newsAppservice;
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] PaginationRequest request)
     {
@@ -20,6 +21,15 @@ public class NewsController(INewsAppService newsAppservice) : BaseController
         return CustomResponse(appService.Item1, appService.Item2);
     }
 
+    [AllowAnonymous]
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetByIdPath(Guid id)
+    {
+        var appService = await _newsAppservice.GetById(id);
+        return CustomResponse(appService.Item1, appService.Item2);
+    }
+
+    [AllowAnonymous]
     [HttpGet("id")]
     public async Task<IActionResult> GetById([FromQuery] Guid Id)
     {

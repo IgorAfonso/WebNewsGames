@@ -1,7 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import GetGeneralNews from "@/services/GetGeneralNews";
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+import { getNewsList } from "@/services/NewsService";
+import type { NewsSummary } from "@/models/NewsModels";
 
 const NEWS_PER_COLUMN = 10;
 const COLUMNS_PER_PAGE = 3;
@@ -9,8 +11,15 @@ const NEWS_PER_PAGE = NEWS_PER_COLUMN * COLUMNS_PER_PAGE;
 
 export default function GeneralNewsSection() {
   const [currentPage, setCurrentPage] = useState(1);
-  const generalNews = useMemo(() => GetGeneralNews(), []);
+  const [generalNews, setGeneralNews] = useState<NewsSummary[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const totalPages = Math.ceil(generalNews.length / NEWS_PER_PAGE);
+
+  useEffect(() => {
+    getNewsList(NEWS_PER_PAGE * 3)
+      .then(setGeneralNews)
+      .finally(() => setIsLoading(false));
+  }, []);
 
   const currentColumns = useMemo(() => {
     const pageStart = (currentPage - 1) * NEWS_PER_PAGE;
@@ -25,6 +34,7 @@ export default function GeneralNewsSection() {
   return (
     <section className="container w-[90%] mx-auto py-8">
       <h2 className="text-2xl font-bold mb-4">Noticias Gerais</h2>
+      {isLoading && <p className="text-muted">Carregando noticias...</p>}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {currentColumns.map((column, columnIndex) => (
@@ -35,9 +45,8 @@ export default function GeneralNewsSection() {
             <ul className="divide-y divide-gray-200">
               {column.map((news) => (
                 <li key={news.id} className="py-3 first:pt-0 last:pb-0">
-                  <button
-                    type="button"
-                    onClick={() => alert(`Clicou em ${news.title}`)}
+                  <Link
+                    href={`/news/${news.id}?from=/home`}
                     className="block w-full text-left group"
                   >
                     <h3 className="text-base font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
@@ -46,7 +55,7 @@ export default function GeneralNewsSection() {
                     <p className="mt-1 text-sm text-gray-600 leading-relaxed">
                       {news.description}
                     </p>
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -58,7 +67,7 @@ export default function GeneralNewsSection() {
         aria-label="Paginas de noticias gerais"
         className="mt-6 flex flex-wrap justify-center gap-2"
       >
-        {Array.from({ length: totalPages }, (_, index) => {
+        {Array.from({ length: Math.max(totalPages, 1) }, (_, index) => {
           const page = index + 1;
           const isCurrentPage = page === currentPage;
 
