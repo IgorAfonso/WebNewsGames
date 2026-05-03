@@ -2,7 +2,6 @@
 
 @layer base {
   :root {
-    /* Cores customizadas como variáveis */
     --color-primary: #1e40af;
     --color-accent: #2563eb;
     --color-hoverBlue: #93c5fd;
@@ -10,51 +9,194 @@
     --color-darkGray: #4b5563;
     --color-hoverDarkBlue: #1d4ed8;
     --color-grey: #ffffff;
+    --color-background: #eef2f7;
+    --color-surface: #ffffff;
+    --color-surface-muted: #f9fafb;
+    --color-surface-raised: #ffffff;
+    --color-text: #111827;
+    --color-text-muted: #4b5563;
+    --color-text-soft: #6b7280;
+    --color-border: #d1d5db;
+    --color-border-soft: #e5e7eb;
+    --color-input: #ffffff;
+    --color-placeholder: #6b7280;
 
-    /* Fontes */
     --font-sans: Arial, sans-serif;
   }
 
-  /* Usar fonte personalizada no body */
+  :root[data-theme="dark"] {
+    --color-primary: #1f6feb;
+    --color-accent: #388bfd;
+    --color-hoverBlue: #79c0ff;
+    --color-lightGray: #0d1117;
+    --color-darkGray: #c9d1d9;
+    --color-hoverDarkBlue: #58a6ff;
+    --color-grey: #161b22;
+    --color-background: #0d1117;
+    --color-surface: #161b22;
+    --color-surface-muted: #21262d;
+    --color-surface-raised: #1c2128;
+    --color-text: #e6edf3;
+    --color-text-muted: #c9d1d9;
+    --color-text-soft: #8b949e;
+    --color-border: #30363d;
+    --color-border-soft: #30363d;
+    --color-input: #0d1117;
+    --color-placeholder: #8b949e;
+  }
+
   body {
+    background-color: var(--color-background);
+    color: var(--color-text);
     font-family: var(--font-sans);
-    background-color: var(--color-lightGray);
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
+  }
+
+  input,
+  textarea,
+  select {
+    color: var(--color-text);
+  }
+
+  ::placeholder {
+    color: var(--color-placeholder);
   }
 }
 
 @layer components {
+  .bg-app {
+    background-color: var(--color-background);
+  }
+
+  .bg-surface {
+    background-color: var(--color-surface);
+  }
+
+  .bg-surface-muted {
+    background-color: var(--color-surface-muted);
+  }
+
   .bg-primary {
     background-color: var(--color-primary);
   }
+
   .bg-accent {
     background-color: var(--color-accent);
   }
+
+  .bg-lightGray {
+    background-color: var(--color-background);
+  }
+
+  .bg-grey {
+    background-color: var(--color-surface);
+  }
+
+  .text-app {
+    color: var(--color-text);
+  }
+
+  .text-muted {
+    color: var(--color-text-muted);
+  }
+
   .text-darkGray {
     color: var(--color-darkGray);
   }
+
+  .text-accent {
+    color: var(--color-accent);
+  }
+
+  .border-app {
+    border-color: var(--color-border);
+  }
+
   .hover\:bg-hoverDarkBlue:hover {
     background-color: var(--color-hoverDarkBlue);
   }
+
+  .hover\:bg-accent:hover {
+    background-color: var(--color-accent);
+  }
+
+  .hover\:text-hoverBlue:hover {
+    color: var(--color-hoverBlue);
+  }
+
+  .hover\:text-accent:hover {
+    color: var(--color-accent);
+  }
 }
 
-/* Exemplo de media queries para breakpoints */
-@media (min-width: 640px) {
-  /* sm */
-  /* aqui vc pode definir classes customizadas, se quiser */
-}
+@layer utilities {
+  :root[data-theme="dark"] .bg-white,
+  :root[data-theme="dark"] .bg-white\/80 {
+    background-color: var(--color-surface);
+  }
 
-@media (min-width: 768px) {
-  /* md */
-}
+  :root[data-theme="dark"] .hover\:bg-white:hover {
+    background-color: var(--color-surface-raised);
+  }
 
-@media (min-width: 1024px) {
-  /* lg */
-}
+  :root[data-theme="dark"] .bg-gray-50,
+  :root[data-theme="dark"] .bg-gray-100,
+  :root[data-theme="dark"] .bg-gray-200 {
+    background-color: var(--color-surface-muted);
+  }
 
-@media (min-width: 1280px) {
-  /* xl */
-}
+  :root[data-theme="dark"] .hover\:bg-blue-50:hover,
+  :root[data-theme="dark"] .hover\:bg-blue-100:hover {
+    background-color: var(--color-surface-muted);
+  }
 
-@media (min-width: 1536px) {
-  /* 2xl */
+  :root[data-theme="dark"] .text-gray-900,
+  :root[data-theme="dark"] .text-gray-800,
+  :root[data-theme="dark"] .text-gray-700,
+  :root[data-theme="dark"] .text-\[\#1e40af\] {
+    color: var(--color-text);
+  }
+
+  :root[data-theme="dark"] .text-gray-600,
+  :root[data-theme="dark"] .text-gray-500,
+  :root[data-theme="dark"] .text-gray-400 {
+    color: var(--color-text-soft);
+  }
+
+  :root[data-theme="dark"] .text-blue-700,
+  :root[data-theme="dark"] .hover\:text-blue-700:hover,
+  :root[data-theme="dark"] .hover\:text-blue-600:hover {
+    color: var(--color-hoverBlue);
+  }
+
+  :root[data-theme="dark"] .border-gray-300,
+  :root[data-theme="dark"] .border-gray-200,
+  :root[data-theme="dark"] .border-blue-700,
+  :root[data-theme="dark"] .border-lightGray {
+    border-color: var(--color-border);
+  }
+
+  :root[data-theme="dark"] .divide-gray-200 > :not(:last-child) {
+    border-color: var(--color-border-soft);
+  }
+
+  :root[data-theme="dark"] input,
+  :root[data-theme="dark"] textarea,
+  :root[data-theme="dark"] select {
+    background-color: var(--color-input);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  :root[data-theme="dark"] .shadow-lg,
+  :root[data-theme="dark"] .shadow-xl,
+  :root[data-theme="dark"] .shadow-2xl {
+    box-shadow: 0 12px 28px rgb(0 0 0 / 0.35);
+  }
+
+  :root[data-theme="dark"] .theme-toggle .bg-white {
+    background-color: #ffffff;
+  }
 }
